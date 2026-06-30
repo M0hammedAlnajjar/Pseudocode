@@ -1,0 +1,159 @@
+1-
+
+
+PROGRAM Hospital System
+
+
+CLASS Patient
+
+    ATTRIBUTES
+        status : String
+        name : String
+        age : Integer
+        patientID : Integer
+        gender : String
+        dateOfBirth : Date
+        admissionDate : Date
+        dischargeDate : Date
+        procedures : List of Procedure
+        rooms : List of Room
+
+
+    CONSTRUCTOR Patient(n, a, id, g, dob)
+
+        START
+            SET name TO n
+            SET age TO a
+            SET patientID TO id
+            SET gender TO g
+            SET dateOfBirth TO dob
+            SET status TO "Free"
+            SET procedures TO EMPTY LIST
+            SET rooms TO EMPTY LIST
+        END
+
+
+    METHOD Admit()
+
+        START
+            SET status TO "Admitted"
+            DISPLAY "Patient Admitted"
+        END
+
+
+    METHOD Discharge()
+
+        START
+            SET status TO "Discharged"
+            SET dischargeDate TO TODAY
+            DISPLAY "Patient Discharged"
+        END
+
+
+    METHOD AddProcedure(procedure)
+
+        START
+            ADD procedure TO procedures
+            DISPLAY "Procedure Added"
+        END
+
+
+    METHOD AssignRoom(room)
+
+        START
+            ADD room TO rooms
+            SET availability OF room TO FALSE
+            DISPLAY "Room Assigned"
+        END
+
+
+    METHOD DisplayPatientInfo()
+
+        START
+            DISPLAY name
+            DISPLAY patientID
+            DISPLAY status
+        END
+
+END CLASS
+
+
+
+CLASS Room
+
+    ATTRIBUTES
+        roomNumber : Integer
+        roomType : String
+        floor : Integer
+        availability : Boolean
+
+
+    CONSTRUCTOR Room(num, type, f)
+
+        START
+            SET roomNumber TO num
+            SET roomType TO type
+            SET floor TO f
+            SET availability TO TRUE
+        END
+
+
+    METHOD ReleaseRoom()
+
+        START
+            SET availability TO TRUE
+        END
+
+END CLASS
+
+
+
+CLASS Procedure
+
+    ATTRIBUTES
+        procedureID : Integer
+        procedureName : String
+        date : Date
+        doctorName : String
+        cost : Double
+
+
+    CONSTRUCTOR Procedure(id, name, d, doctor, c)
+
+        START
+            SET procedureID TO id
+            SET procedureName TO name
+            SET date TO d
+            SET doctorName TO doctor
+            SET cost TO c
+        END
+
+
+    METHOD DisplayProcedure()
+
+        START
+            DISPLAY procedureName
+            DISPLAY doctorName
+            DISPLAY cost
+        END
+
+END CLASS
+
+
+
+// OBJECTS
+
+patient1 to NEW Patient("Ali", 28, 15749, "Male", "20-04-2026")
+
+room1 to NEW Room(124, "Private", 3)
+
+procedure1 to NEW Procedure(5512, "Full Blood", "20-06-2026", "Ali", 45.25)
+
+
+// OPERATIONS
+
+patient1.Admit()
+patient1.AssignRoom(room1)
+patient1.AddProcedure(procedure1)
+
+END PROGRAM
