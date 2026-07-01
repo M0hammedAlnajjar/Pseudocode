@@ -240,9 +240,82 @@ END PROGRAM
 
 
 
+Scenario 3: Restaurant Order
+
+CLASS Order
+    ATTRIBUTES
+        orderID : Integer
+        tableNumber : Integer
+        orderDate : String
+        totalAmount : Double
+        status : String
+        orderItems : List of OrderItem
+
+    CONSTRUCTOR Order(id, table, date, total, status)
+        orderID :id
+        tableNumber :table
+        orderDate :date
+        totalAmount : total
+        status : status
+        orderItems : Empty List
+    END CONSTRUCTOR
+
+    METHOD addItem(item)
+        Add item TO orderItems
+    END METHOD
+END CLASS
 
 
+CLASS OrderItem
+    ATTRIBUTES
+        itemID : Integer
+        quantity : Integer
+        subtotal : Double
+        dish : Dish
 
+    CONSTRUCTOR OrderItem(id, qty, sub, dish)
+        itemID :id
+        quantity : qty
+        subtotal : sub
+        this.dish : dish
+    END CONSTRUCTOR
+
+    METHOD calculateSubtotal()
+        subtotal ← quantity × dish.price
+    END METHOD
+END CLASS
+
+
+CLASS Dish
+    ATTRIBUTES
+        dishID : Integer
+        dishName : String
+        category : String
+        price : Double
+        preparationDetails : String
+
+    CONSTRUCTOR Dish(id, name, category, price, details)
+        dishID :id
+        dishName : name
+        this.category : category
+        this.price : price
+        preparationDetails : details
+    END CONSTRUCTOR
+
+    METHOD displayDish()
+        Display dishName, category, price
+    END METHOD
+END CLASS
+
+
+OBJECT dish1 to Dish(101, "Chicken Burger", "Main Course", 7.50, "Grilled chicken with lettuce, tomato, and cheese served in a toasted bun.")
+
+OBJECT item1 to OrderItem(1, 2, 15.00, dish1)
+
+OBJECT order1 to Order(1001, 5, "18/06/2026", 25.50, "Completed")
+
+
+END PROGRAM
 
 
 
