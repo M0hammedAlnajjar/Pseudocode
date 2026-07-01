@@ -1,1 +1,86 @@
+CLASS owner 
+ 	ATTRIBUTES
+	 	ownerID : Integer	
+         	name : String
+         	phoneNumber : String
+         	pets : List of Pet
+ 
+	CONSTRUCTOR Owner(id, name, phone)	
+	       ownerID :id
+	       SET this.name to name 
+ 	       phoneNumber to phone 
+ 	       pets to Empty List
+ 
+ 	END CONSTRUCTOR 
 
+	METHOD
+
+	addPet(pet)
+	Add pet TO pets
+
+	END METHOD
+END CLASS
+
+
+CLASS Species
+	ATTRIBUTES
+	   speciesName : String
+	   careRequirements : String
+
+	CONSTRUCTOR Species(name, care)
+	   speciesName to name 
+	   careRequirements to care
+
+	END CONSTRUCTOR
+
+END CLASS
+
+CLASS Pet
+ 	ATTRIBUTES
+	    petID : Integer
+	    name : String 
+	   dateOfBirth : Date 
+	   species : Species 
+	   medicalHistory : List of Examination
+
+ 	CONSTRUCTOR Pet(id, name, dob, species) 
+	   SET petID to id this.name to name
+           dateOfBirth to dob this.species ← species
+	   medicalHistory to Empty List 
+	END CONSTRUCTOR
+
+ 	METHOD 
+	  getAge() 
+	  RETURN CurrentDate - dateOfBirth 
+	END METHOD 
+
+	METHOD addExamination(exam) 
+	   Add exam TO medicalHistory
+	END METHOD 
+END CLASS
+
+CLASS Examination
+	ATTRIBUTES
+		examID : Integer
+		diagnosis : String
+`		urgent : Boolean
+ 		treatments : List of Treatment
+	CONSTRUCTOR Examination(id, diagnosis)
+	 	examID to id
+ 		SET this.diagnosis to diagnosis
+		urgent to false
+
+	END CONSTRUCTOR
+	METHOD checkUrgency()
+	  IF vital signs are outside safe range THEN
+		urgent TO true
+	 END IF
+
+	METHOD 
+	  addTreatment(treatment)
+	  Add treatment TO treatments 
+	END METHOD
+END CLASS
+	
+		
+		
