@@ -276,4 +276,154 @@ END PROGRAM
 
 
 
+
+
+Task 280: Warehouse Inventory 
+
+CLASS Vendor
+    ATTRIBUTES
+        vendorID : Integer
+        vendorName : String
+        contactNumber : String
+        reliabilityRating : Double
+        products : List of Product
+
+    CONSTRUCTOR Vendor(id, name, contact, rating)
+        SET vendorID TO id
+        SET vendorName TO name
+        SET contactNumber TO contact
+        SET reliabilityRating TO rating
+        SET products TO Empty List
+    END CONSTRUCTOR
+
+    METHOD addProduct(product)
+        Add product TO products
+    END METHOD
+
+    METHOD updateReliability(newRating)
+        SET reliabilityRating TO newRating
+    END METHOD
+END CLASS
+
+
+CLASS Category
+    ATTRIBUTES
+        categoryID : Integer
+        categoryName : String
+
+    CONSTRUCTOR Category(id, name)
+        SET categoryID TO id
+        SET categoryName TO name
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS StorageBin
+    ATTRIBUTES
+        binID : Integer
+        location : String
+        quantity : Integer
+
+    CONSTRUCTOR StorageBin(id, location, quantity)
+        SET binID TO id
+        SET this.location TO location
+        SET this.quantity TO quantity
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS StockMovement
+    ATTRIBUTES
+        movementID : Integer
+        movementType : String
+        quantity : Integer
+        movementDate : Date
+
+    CONSTRUCTOR StockMovement(id, type, quantity, date)
+        SET movementID TO id
+        SET movementType TO type
+        SET this.quantity TO quantity
+        SET movementDate TO date
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Product
+    ATTRIBUTES
+        productID : Integer
+        productName : String
+        category : Category
+        vendor : Vendor
+        bins : List of StorageBin
+        stockMovements : List of StockMovement
+
+    CONSTRUCTOR Product(id, name, category, vendor)
+        SET productID TO id
+        SET productName TO name
+        SET this.category TO category
+        SET this.vendor TO vendor
+        SET bins TO Empty List
+        SET stockMovements TO Empty List
+    END CONSTRUCTOR
+
+    METHOD addBin(bin)
+        Add bin TO bins
+    END METHOD
+
+    METHOD addStockMovement(movement)
+        IF movement.movementType = "OUT" AND
+           movement.quantity > getTotalStock() THEN
+            Display "Insufficient Stock"
+        ELSE
+            Add movement TO stockMovements
+        END IF
+    END METHOD
+
+    METHOD getTotalStock()
+        RETURN Sum of quantity in bins
+    END METHOD
+
+END CLASS
+
+
+START
+BEGIN
+
+CREATE OBJECT vendor1 OF Vendor
+SET vendor1.vendorID TO 101
+SET vendor1.vendorName TO "ABC Suppliers"
+SET vendor1.contactNumber TO "91234567"
+SET vendor1.reliabilityRating TO 4.8
+
+CREATE OBJECT category1 OF Category
+SET category1.categoryID TO 201
+SET category1.categoryName TO "Electronics"
+
+CREATE OBJECT product1 OF Product
+SET product1.productID TO 301
+SET product1.productName TO "Laptop"
+SET product1.category TO category1
+SET product1.vendor TO vendor1
+
+vendor1.addProduct(product1)
+
+CREATE OBJECT bin1 OF StorageBin
+SET bin1.binID TO 401
+SET bin1.location TO "A1"
+SET bin1.quantity TO 20
+
+product1.addBin(bin1)
+
+CREATE OBJECT movement1 OF StockMovement
+SET movement1.movementID TO 501
+SET movement1.movementType TO "OUT"
+SET movement1.quantity TO 5
+SET movement1.movementDate TO "01/07/2026"
+
+product1.addStockMovement(movement1)
+
+DISPLAY product1.getTotalStock()
+
+END
+STOP
 	
