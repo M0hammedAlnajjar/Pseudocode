@@ -849,3 +849,154 @@ END
 STOP
 
 
+Task 283: Car Dealership
+
+
+BEGIN
+
+
+CLASS Customer
+    ATTRIBUTES
+        customerID : Integer
+        customerName : String
+        phoneNumber : String
+
+    CONSTRUCTOR Customer(id, name, phone)
+        SET customerID TO id
+        SET customerName TO name
+        SET this.phoneNumber TO phone
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Model
+    ATTRIBUTES
+        modelID : Integer
+        modelName : String
+        basePrice : Double
+
+    CONSTRUCTOR Model(id, name, price)
+        SET modelID TO id
+        SET modelName TO name
+        SET basePrice TO price
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Vehicle
+    ATTRIBUTES
+        vehicleID : Integer
+        specifications : String
+        model : Model
+        listedPrice : Double
+        availability : Boolean
+
+    CONSTRUCTOR Vehicle(id, specs, model, price)
+        SET vehicleID TO id
+        SET specifications TO specs
+        SET this.model TO model
+
+        IF price < model.basePrice THEN
+            SET listedPrice TO model.basePrice
+        ELSE
+            SET listedPrice TO price
+        END IF
+
+        SET availability TO True
+    END CONSTRUCTOR
+
+    METHOD markSold()
+        SET availability TO False
+    END METHOD
+END CLASS
+
+
+CLASS AddOnFeature
+    ATTRIBUTES
+        featureID : Integer
+        featureName : String
+        cost : Double
+
+    CONSTRUCTOR AddOnFeature(id, name, cost)
+        SET featureID TO id
+        SET featureName TO name
+        SET this.cost TO cost
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Sale
+    ATTRIBUTES
+        saleID : Integer
+        customer : Customer
+        vehicle : Vehicle
+        agreedPrice : Double
+        addOns : List of AddOnFeature
+
+    CONSTRUCTOR Sale(id, customer, vehicle, price)
+        SET saleID TO id
+        SET this.customer TO customer
+        SET this.vehicle TO vehicle
+        SET agreedPrice TO price
+        SET addOns TO Empty List
+
+        IF vehicle.availability = True THEN
+            vehicle.markSold()
+        ELSE
+            DISPLAY "Vehicle already sold"
+        END IF
+    END CONSTRUCTOR
+
+    METHOD addFeature(feature)
+        Add feature TO addOns
+    END METHOD
+
+    METHOD calculateTotal()
+        total = agreedPrice
+
+        FOR EACH f IN addOns
+            total = total + f.cost
+        END FOR
+
+        RETURN total
+    END METHOD
+END CLASS
+
+
+START
+BEGIN
+
+CREATE OBJECT model1 OF Model
+SET model1.modelID TO 101
+SET model1.modelName TO "Toyota Corolla"
+SET model1.basePrice TO 10000
+
+CREATE OBJECT vehicle1 OF Vehicle
+SET vehicle1.vehicleID TO 201
+SET vehicle1.specifications TO "1.8L Engine"
+SET vehicle1.model TO model1
+SET vehicle1.listedPrice TO 12000
+
+CREATE OBJECT customer1 OF Customer
+SET customer1.customerID TO 301
+SET customer1.customerName TO "Ali Hassan"
+SET customer1.phoneNumber TO "91234567"
+
+CREATE OBJECT sale1 OF Sale
+SET sale1.saleID TO 401
+SET sale1.customer TO customer1
+SET sale1.vehicle TO vehicle1
+SET sale1.agreedPrice TO 12000
+
+CREATE OBJECT addon1 OF AddOnFeature
+SET addon1.featureID TO 501
+SET addon1.featureName TO "Tinted Windows"
+SET addon1.cost TO 200
+
+sale1.addFeature(addon1)
+
+DISPLAY sale1.calculateTotal()
+
+END
+STOP
+
