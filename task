@@ -433,19 +433,131 @@ STOP
 Task 281: School Classroom
 
 
-CLASS Teacher
+CLASS PolicyHolder
     ATTRIBUTES
-        teacherID : Integer
-        teacherName : String
-        subject : Subject
+        holderID : Integer
+        holderName : String
+        contactNumber : String
+        address : String
 
-    CONSTRUCTOR Teacher(id, name, subject)
-        SET teacherID TO id
-        SET teacherName TO name
-        SET this.subject TO subject
+    CONSTRUCTOR PolicyHolder(id, name, contact, address)
+        SET holderID TO id
+        SET holderName TO name
+        SET contactNumber TO contact
+        SET this.address TO address
     END CONSTRUCTOR
 END CLASS
 
+
+CLASS Coverage
+    ATTRIBUTES
+        coverageID : Integer
+        coverageType : String
+        limit : Double
+        usedAmount : Double
+
+    CONSTRUCTOR Coverage(id, type, limit)
+        SET coverageID TO id
+        SET coverageType TO type
+        SET this.limit TO limit
+        SET usedAmount TO 0
+    END CONSTRUCTOR
+
+    METHOD getRemainingLimit()
+        RETURN limit - usedAmount
+    END METHOD
+END CLASS
+
+
+CLASS Claim
+    ATTRIBUTES
+        claimID : Integer
+        description : String
+        amount : Double
+        status : String   // Filed → UnderReview → Approved → Rejected
+
+    CONSTRUCTOR Claim(id, desc, amount)
+        SET claimID TO id
+        SET description TO desc
+        SET this.amount TO amount
+        SET status TO "Filed"
+    END CONSTRUCTOR
+
+    METHOD updateStatus(newStatus)
+        SET status TO newStatus
+    END METHOD
+END CLASS
+
+
+CLASS Policy
+    ATTRIBUTES
+        policyID : Integer
+        policyHolder : PolicyHolder
+        coverages : List of Coverage
+        claims : List of Claim
+
+    CONSTRUCTOR Policy(id, holder)
+        SET policyID TO id
+        SET this.policyHolder TO holder
+        SET coverages TO Empty List
+        SET claims TO Empty List
+    END CONSTRUCTOR
+
+    METHOD addCoverage(coverage)
+        Add coverage TO coverages
+    END METHOD
+
+    METHOD addClaim(claim)
+        IF claim.amount > getTotalRemainingCoverage() THEN
+            DISPLAY "Claim exceeds remaining coverage"
+        ELSE
+            Add claim TO claims
+        END IF
+    END METHOD
+
+    METHOD getTotalRemainingCoverage()
+        total = 0
+
+        FOR EACH c IN coverages
+            total = total + c.getRemainingLimit()
+        END FOR
+
+        RETURN total
+    END METHOD
+END CLASS
+
+
+START
+BEGIN
+
+CREATE OBJECT holder1 OF PolicyHolder
+SET holder1.holderID TO 101
+SET holder1.holderName TO "Ali Ahmed"
+SET holder1.contactNumber TO "91234567"
+SET holder1.address TO "Muscat"
+
+CREATE OBJECT policy1 OF Policy
+SET policy1.policyID TO 201
+SET policy1.policyHolder TO holder1
+
+CREATE OBJECT coverage1 OF Coverage
+SET coverage1.coverageID TO 301
+SET coverage1.coverageType TO "Health"
+SET coverage1.limit TO 10000
+
+policy1.addCoverage(coverage1)
+
+CREATE OBJECT claim1 OF Claim
+SET claim1.claimID TO 401
+SET claim1.description TO "Hospital Treatment"
+SET claim1.amount TO 2000
+
+policy1.addClaim(claim1)
+
+DISPLAY policy1.getTotalRemainingCoverage()
+
+END
+STOP
 
 CLASS Subject
     ATTRIBUTES
@@ -603,4 +715,137 @@ DISPLAY student1.calculateAverage()
 
 END
 STOP
-	
+
+
+Task 282: Insurance Policy	
+
+BEGIN
+
+
+CLASS PolicyHolder
+    ATTRIBUTES
+        holderID : Integer
+        holderName : String
+        contactNumber : String
+        address : String
+
+    CONSTRUCTOR PolicyHolder(id, name, contact, address)
+        SET holderID TO id
+        SET holderName TO name
+        SET contactNumber TO contact
+        SET this.address TO address
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Coverage
+    ATTRIBUTES
+        coverageID : Integer
+        coverageType : String
+        limit : Double
+        usedAmount : Double
+
+    CONSTRUCTOR Coverage(id, type, limit)
+        SET coverageID TO id
+        SET coverageType TO type
+        SET this.limit TO limit
+        SET usedAmount TO 0
+    END CONSTRUCTOR
+
+    METHOD getRemainingLimit()
+        RETURN limit - usedAmount
+    END METHOD
+END CLASS
+
+
+CLASS Claim
+    ATTRIBUTES
+        claimID : Integer
+        description : String
+        amount : Double
+        status : String   // Filed → UnderReview → Approved → Rejected
+
+    CONSTRUCTOR Claim(id, desc, amount)
+        SET claimID TO id
+        SET description TO desc
+        SET this.amount TO amount
+        SET status TO "Filed"
+    END CONSTRUCTOR
+
+    METHOD updateStatus(newStatus)
+        SET status TO newStatus
+    END METHOD
+END CLASS
+
+
+CLASS Policy
+    ATTRIBUTES
+        policyID : Integer
+        policyHolder : PolicyHolder
+        coverages : List of Coverage
+        claims : List of Claim
+
+    CONSTRUCTOR Policy(id, holder)
+        SET policyID TO id
+        SET this.policyHolder TO holder
+        SET coverages TO Empty List
+        SET claims TO Empty List
+    END CONSTRUCTOR
+
+    METHOD addCoverage(coverage)
+        Add coverage TO coverages
+    END METHOD
+
+    METHOD addClaim(claim)
+        IF claim.amount > getTotalRemainingCoverage() THEN
+            DISPLAY "Claim exceeds remaining coverage"
+        ELSE
+            Add claim TO claims
+        END IF
+    END METHOD
+
+    METHOD getTotalRemainingCoverage()
+        total = 0
+
+        FOR EACH c IN coverages
+            total = total + c.getRemainingLimit()
+        END FOR
+
+        RETURN total
+    END METHOD
+END CLASS
+
+
+START
+BEGIN
+
+CREATE OBJECT holder1 OF PolicyHolder
+SET holder1.holderID TO 101
+SET holder1.holderName TO "Ali Ahmed"
+SET holder1.contactNumber TO "91234567"
+SET holder1.address TO "Muscat"
+
+CREATE OBJECT policy1 OF Policy
+SET policy1.policyID TO 201
+SET policy1.policyHolder TO holder1
+
+CREATE OBJECT coverage1 OF Coverage
+SET coverage1.coverageID TO 301
+SET coverage1.coverageType TO "Health"
+SET coverage1.limit TO 10000
+
+policy1.addCoverage(coverage1)
+
+CREATE OBJECT claim1 OF Claim
+SET claim1.claimID TO 401
+SET claim1.description TO "Hospital Treatment"
+SET claim1.amount TO 2000
+
+policy1.addClaim(claim1)
+
+DISPLAY policy1.getTotalRemainingCoverage()
+
+END
+STOP
+
+
