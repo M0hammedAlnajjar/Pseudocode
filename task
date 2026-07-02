@@ -1333,3 +1333,165 @@ DISPLAY concert1.getRemainingTickets()
 END
 STOP
 
+
+Task 286: Software Sprint
+
+CLASS Developer
+    ATTRIBUTES
+        developerID : Integer
+        developerName : String
+        capacity : Integer
+        assignedTasks : List of Task
+
+    CONSTRUCTOR Developer(id, name, capacity)
+        SET developerID TO id
+        SET developerName TO name
+        SET this.capacity TO capacity
+        SET assignedTasks TO Empty List
+    END CONSTRUCTOR
+
+    METHOD canAssign()
+        RETURN assignedTasks.size < capacity
+    END METHOD
+
+    METHOD assignTask(task)
+        IF canAssign() THEN
+            Add task TO assignedTasks
+        ELSE
+            DISPLAY "Capacity Reached"
+        END IF
+    END METHOD
+END CLASS
+
+
+CLASS Task
+    ATTRIBUTES
+        taskID : Integer
+        taskName : String
+        status : String   // Backlog → InProgress → Testing → Done
+        developer : Developer
+
+    CONSTRUCTOR Task(id, name)
+        SET taskID TO id
+        SET taskName TO name
+        SET status TO "Backlog"
+    END CONSTRUCTOR
+
+    METHOD assignDeveloper(dev)
+        IF dev.canAssign() THEN
+            SET developer TO dev
+            dev.assignTask(this)
+        ELSE
+            DISPLAY "Developer overloaded"
+        END IF
+    END METHOD
+
+    METHOD moveToNextStage()
+        IF status = "Backlog" THEN
+            SET status TO "InProgress"
+        ELSE IF status = "InProgress" THEN
+            SET status TO "Testing"
+        ELSE IF status = "Testing" THEN
+            SET status TO "Done"
+        END IF
+    END METHOD
+
+    METHOD markComplete()
+        IF status = "Done" THEN
+            DISPLAY "Task Completed"
+        ELSE
+            DISPLAY "Cannot complete task yet"
+        END IF
+    END METHOD
+END CLASS
+
+
+CLASS Backlog
+    ATTRIBUTES
+        tasks : List of Task
+
+    CONSTRUCTOR Backlog()
+        SET tasks TO Empty List
+    END CONSTRUCTOR
+
+    METHOD addTask(task)
+        Add task TO tasks
+    END METHOD
+
+    METHOD getNextTask()
+        RETURN first task in tasks
+    END METHOD
+END CLASS
+
+
+CLASS Sprint
+    ATTRIBUTES
+        sprintID : Integer
+        tasks : List of Task
+        backlog : Backlog
+
+    CONSTRUCTOR Sprint(id, backlog)
+        SET sprintID TO id
+        SET this.backlog TO backlog
+        SET tasks TO Empty List
+    END CONSTRUCTOR
+
+    METHOD pullTask()
+        task = backlog.getNextTask()
+        Add task TO tasks
+    END METHOD
+
+    METHOD calculateProgress()
+        doneCount = 0
+
+        FOR EACH t IN tasks
+            IF t.status = "Done" THEN
+                doneCount = doneCount + 1
+            END IF
+        END FOR
+
+        RETURN (doneCount / tasks.size) * 100
+    END METHOD
+END CLASS
+
+
+START
+BEGIN
+
+CREATE OBJECT backlog1 OF Backlog
+
+CREATE OBJECT dev1 OF Developer
+SET dev1.developerID TO 101
+SET dev1.developerName TO "Ali"
+SET dev1.capacity TO 2
+
+CREATE OBJECT task1 OF Task
+SET task1.taskID TO 201
+SET task1.taskName TO "Login System"
+
+CREATE OBJECT task2 OF Task
+SET task2.taskID TO 202
+SET task2.taskName TO "Dashboard UI"
+
+backlog1.addTask(task1)
+backlog1.addTask(task2)
+
+CREATE OBJECT sprint1 OF Sprint
+SET sprint1.sprintID TO 301
+SET sprint1.backlog TO backlog1
+
+sprint1.pullTask()
+sprint1.pullTask()
+
+task1.assignDeveloper(dev1)
+task2.assignDeveloper(dev1)
+
+task1.moveToNextStage()
+task1.moveToNextStage()
+task1.moveToNextStage()
+task1.markComplete()
+
+DISPLAY sprint1.calculateProgress()
+
+END
+STOP
