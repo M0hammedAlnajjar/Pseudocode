@@ -4,10 +4,10 @@ BEGIN
 
 CLASS Owner
     ATTRIBUTES
-        ownerID : Integer
-        name : String
-        phoneNumber : String
-        pets : List of Pet
+       Private ownerID : Integer
+       Private name : String
+       Private phoneNumber : String
+       Private pets : List of Pet
 
     CONSTRUCTOR Owner(id, name, phone)
         SET ownerID TO id
@@ -16,7 +16,7 @@ CLASS Owner
         SET pets TO Empty List
     END CONSTRUCTOR
 
-    METHOD addPet(pet)
+    PUBLIC METHOD addPet(pet)
         Add pet TO pets
     END METHOD
 END CLASS
@@ -24,8 +24,8 @@ END CLASS
 
 CLASS Species
     ATTRIBUTES
-        speciesName : String
-        careRequirements : String
+        Private speciesName : String
+        Private careRequirements : String
 
     CONSTRUCTOR Species(name, care)
         SET speciesName TO name
@@ -36,11 +36,11 @@ END CLASS
 
 CLASS Pet
     ATTRIBUTES
-        petID : Integer
-        name : String
-        dateOfBirth : Date
-        species : Species
-        medicalHistory : List of Examination
+        Private petID : Integer
+        Private name : String
+        Private dateOfBirth : Date
+        Private species : Species
+        Private medicalHistory : List of Examination
 
     CONSTRUCTOR Pet(id, name, dob, species)
         SET petID TO id
@@ -50,7 +50,7 @@ CLASS Pet
         SET medicalHistory TO Empty List
     END CONSTRUCTOR
 
-    METHOD getAge()
+    PUBLIC METHOD getAge()
         RETURN CurrentDate - dateOfBirth
     END METHOD
 
@@ -76,13 +76,13 @@ CLASS Examination
         SET treatments TO Empty List
     END CONSTRUCTOR
 
-    METHOD checkUrgency()
+    PUBLIC METHOD checkUrgency()
         IF vitalSigns are outside safe range THEN
             SET urgent TO True
         END IF
     END METHOD
 
-    METHOD addTreatment(treatment)
+    PUBLIC METHOD addTreatment(treatment)
         Add treatment TO treatments
     END METHOD
 END CLASS
@@ -90,9 +90,9 @@ END CLASS
 
 CLASS Treatment
     ATTRIBUTES
-        treatmentID : Integer
-        description : String
-        cost : Double
+        PRIVATE treatmentID : Integer
+        PRIVATE description : String
+        PRIVATE cost : Double
 
     CONSTRUCTOR Treatment(id, desc, cost)
         SET treatmentID TO id
@@ -104,10 +104,10 @@ END CLASS
 
 CLASS Visit
     ATTRIBUTES
-        visitID : Integer
-        owner : Owner
-        pet : Pet
-        examination : Examination
+        PRIVATE visitID : Integer
+        PRIVATE owner : Owner
+        PRIVATE pet : Pet
+        PRIVATE examination : Examination
 
     CONSTRUCTOR Visit(id, owner, pet, exam)
         SET visitID TO id
@@ -116,7 +116,7 @@ CLASS Visit
         SET examination TO exam
     END CONSTRUCTOR
 
-    METHOD getVisitTotal()
+    PUBLIC METHOD getVisitTotal()
         RETURN Sum of treatment.cost
     END METHOD
 END CLASS
@@ -174,12 +174,13 @@ END PROGRAM
 
 
 Task 279: Movie Theater
+
 CLASS Film
     ATTRIBUTES
-        filmID : Integer
-        title : String
-        genre : String
-        duration : Integer
+        PRIVATE filmID : Integer
+        PRIVATE title : String
+        PRIVATE genre : String
+        PRIVATE duration : Integer
     CONSTRUCTOR Film(id, title, genre, duration)
         filmID to id
         SET this.title to title
@@ -190,10 +191,10 @@ END CLASS
 
 CLASS Screen
     ATTRIBUTES
-        screenID : Integer
-        screenName : String
-        capacity : Integer
-        seatingLayout : String
+       PRIVATE  screenID : Integer
+       PRIVATE screenName : String
+       PRIVATE  capacity : Integer
+       PRIVATE  seatingLayout : String
     CONSTRUCTOR Screen(id, name, capacity, layout)
         screenID to id
         screenName to name
@@ -204,12 +205,12 @@ END CLASS
 
 CLASS Showtime
     ATTRIBUTES
-        showtimeID : Integer
-        startTime : DateTime
-        endTime : DateTime
-        film : Film
-        screen : Screen
-        tickets : List of Ticket
+        PRIVATE showtimeID : Integer
+        PRIVATE startTime : DateTime
+        PRIVATE endTime : DateTime
+        PRIVATE film : Film
+        PRIVATE screen : Screen
+        PRIVATE tickets : List of Ticket
     CONSTRUCTOR Showtime(id, start, end, film, screen)
         showtimeID to id
         startTime to start
@@ -218,7 +219,7 @@ CLASS Showtime
         SET this.screen to screen
         tickets to Empty List
     END CONSTRUCTOR
-    METHOD addTicket(ticket)
+    PUBLIC METHOD addTicket(ticket)
         Add ticket TO tickets
     END METHOD
     METHOD getAvailableSeats()
@@ -228,10 +229,10 @@ END CLASS
 
 CLASS Ticket
     ATTRIBUTES
-        ticketID : Integer
-        customerName : String
-        seatNumber : String
-        showtime : Showtime
+        PRIVATE ticketID : Integer
+        PRIVATE customerName : String
+        PRIVATE seatNumber : String
+        PRIVATE showtime : Showtime
     CONSTRUCTOR Ticket(id, customer, seat, showtime)
         ticketID  id
         customerName to customer
@@ -282,11 +283,11 @@ Task 280: Warehouse Inventory
 
 CLASS Vendor
     ATTRIBUTES
-        vendorID : Integer
-        vendorName : String
-        contactNumber : String
-        reliabilityRating : Double
-        products : List of Product
+        PRIVATE vendorID : Integer
+        PRIVATE vendorName : String
+        PRIVATE contactNumber : String
+        PRIVATE reliabilityRating : Double
+        PRIVATE products : List of Product
 
     CONSTRUCTOR Vendor(id, name, contact, rating)
         SET vendorID TO id
@@ -308,8 +309,8 @@ END CLASS
 
 CLASS Category
     ATTRIBUTES
-        categoryID : Integer
-        categoryName : String
+        PRIVATE categoryID : Integer
+        PRIVATE categoryName : String
 
     CONSTRUCTOR Category(id, name)
         SET categoryID TO id
@@ -320,9 +321,9 @@ END CLASS
 
 CLASS StorageBin
     ATTRIBUTES
-        binID : Integer
-        location : String
-        quantity : Integer
+        PRIVATE binID : Integer
+        PRIVATE location : String
+        PRIVATE quantity : Integer
 
     CONSTRUCTOR StorageBin(id, location, quantity)
         SET binID TO id
@@ -334,10 +335,10 @@ END CLASS
 
 CLASS StockMovement
     ATTRIBUTES
-        movementID : Integer
-        movementType : String
-        quantity : Integer
-        movementDate : Date
+        PRIVATE movementID : Integer
+        PRIVATE movementType : String
+        PRIVATE quantity : Integer
+        PRIVATE movementDate : Date
 
     CONSTRUCTOR StockMovement(id, type, quantity, date)
         SET movementID TO id
@@ -350,12 +351,12 @@ END CLASS
 
 CLASS Product
     ATTRIBUTES
-        productID : Integer
-        productName : String
-        category : Category
-        vendor : Vendor
-        bins : List of StorageBin
-        stockMovements : List of StockMovement
+        PRIVATE productID : Integer
+        PRIVATE productName : String
+        PRIVATE category : Category
+        PRIVATE vendor : Vendor
+        PRIVATE bins : List of StorageBin
+        PRIVATE stockMovements : List of StockMovement
 
     CONSTRUCTOR Product(id, name, category, vendor)
         SET productID TO id
@@ -435,10 +436,10 @@ Task 281: School Classroom
 
 CLASS PolicyHolder
     ATTRIBUTES
-        holderID : Integer
-        holderName : String
-        contactNumber : String
-        address : String
+        PRIVATE holderID : Integer
+        PRIVATE holderName : String
+        PRIVATE contactNumber : String
+        PRIVATE address : String
 
     CONSTRUCTOR PolicyHolder(id, name, contact, address)
         SET holderID TO id
@@ -451,10 +452,10 @@ END CLASS
 
 CLASS Coverage
     ATTRIBUTES
-        coverageID : Integer
-        coverageType : String
-        limit : Double
-        usedAmount : Double
+        PRIVATE coverageID : Integer
+        PRIVATE coverageType : String
+        PRIVATE limit : Double
+        PRIVATE usedAmount : Double
 
     CONSTRUCTOR Coverage(id, type, limit)
         SET coverageID TO id
@@ -471,10 +472,10 @@ END CLASS
 
 CLASS Claim
     ATTRIBUTES
-        claimID : Integer
-        description : String
-        amount : Double
-        status : String   // Filed → UnderReview → Approved → Rejected
+        PRIVATE claimID : Integer
+        PRIVATE description : String
+        PRIVATE amount : Double
+        PRIVATE status : String   // Filed → UnderReview → Approved → Rejected
 
     CONSTRUCTOR Claim(id, desc, amount)
         SET claimID TO id
@@ -491,10 +492,10 @@ END CLASS
 
 CLASS Policy
     ATTRIBUTES
-        policyID : Integer
-        policyHolder : PolicyHolder
-        coverages : List of Coverage
-        claims : List of Claim
+        PRIVATE policyID : Integer
+        PRIVATE policyHolder : PolicyHolder
+        PRIVATE coverages : List of Coverage
+        PRIVATE claims : List of Claim
 
     CONSTRUCTOR Policy(id, holder)
         SET policyID TO id
@@ -561,10 +562,10 @@ STOP
 
 CLASS Subject
     ATTRIBUTES
-        subjectID : Integer
-        subjectName : String
-        syllabus : String
-        schedule : String
+        PRIVATE subjectID : Integer
+        PRIVATE subjectName : String
+        PRIVATE syllabus : String
+        PRIVATE schedule : String
 
     CONSTRUCTOR Subject(id, name, syllabus, schedule)
         SET subjectID TO id
@@ -577,9 +578,9 @@ END CLASS
 
 CLASS Assessment
     ATTRIBUTES
-        assessmentID : Integer
-        assessmentName : String
-        weight : Real
+        PRIVATE assessmentID : Integer
+        PRIVATE assessmentName : String
+        PRIVATE weight : Real
 
     CONSTRUCTOR Assessment(id, name, weight)
         SET assessmentID TO id
@@ -603,11 +604,11 @@ END CLASS
 
 CLASS Student
     ATTRIBUTES
-        studentID : Integer
-        studentName : String
-        personalRecord : String
-        grades : List of Grade
-        classSchedule : String
+        PRIVATE studentID : Integer
+        PRIVATE studentName : String
+        PRIVATE personalRecord : String
+        PRIVATE grades : List of Grade
+        PRIVATE classSchedule : String
 
     CONSTRUCTOR Student(id, name, record)
         SET studentID TO id
@@ -640,13 +641,13 @@ END CLASS
 
 CLASS SchoolClass
     ATTRIBUTES
-        classID : Integer
-        className : String
-        maxClassSize : Integer
-        schedule : String
-        teacher : Teacher
-        subject : Subject
-        students : List of Student
+        PRIVATE classID : Integer
+        PRIVATE className : String
+        PRIVATE maxClassSize : Integer
+        PRIVATE schedule : String
+        PRIVATE teacher : Teacher
+        PRIVATE subject : Subject
+        PRIVATE students : List of Student
 
     CONSTRUCTOR SchoolClass(id, name, maxSize, schedule, teacher, subject)
         SET classID TO id
@@ -724,10 +725,10 @@ BEGIN
 
 CLASS PolicyHolder
     ATTRIBUTES
-        holderID : Integer
-        holderName : String
-        contactNumber : String
-        address : String
+        PRIVATE holderID : Integer
+        PRIVATE holderName : String
+        PRIVATE contactNumber : String
+        PRIVATE address : String
 
     CONSTRUCTOR PolicyHolder(id, name, contact, address)
         SET holderID TO id
@@ -740,10 +741,10 @@ END CLASS
 
 CLASS Coverage
     ATTRIBUTES
-        coverageID : Integer
-        coverageType : String
-        limit : Double
-        usedAmount : Double
+        PRIVATE coverageID : Integer
+        PRIVATE coverageType : String
+        PRIVATE limit : Double
+        PRIVATE usedAmount : Double
 
     CONSTRUCTOR Coverage(id, type, limit)
         SET coverageID TO id
@@ -760,10 +761,10 @@ END CLASS
 
 CLASS Claim
     ATTRIBUTES
-        claimID : Integer
-        description : String
-        amount : Double
-        status : String   // Filed → UnderReview → Approved → Rejected
+        PRIVATE claimID : Integer
+        PRIVATE description : String
+        PRIVATE amount : Double
+        PRIVATE status : String   // Filed → UnderReview → Approved → Rejected
 
     CONSTRUCTOR Claim(id, desc, amount)
         SET claimID TO id
@@ -780,10 +781,10 @@ END CLASS
 
 CLASS Policy
     ATTRIBUTES
-        policyID : Integer
-        policyHolder : PolicyHolder
-        coverages : List of Coverage
-        claims : List of Claim
+        PRIVATE policyID : Integer
+        PRIVATE policyHolder : PolicyHolder
+        PRIVATE coverages : List of Coverage
+        PRIVATE claims : List of Claim
 
     CONSTRUCTOR Policy(id, holder)
         SET policyID TO id
@@ -853,9 +854,9 @@ Task 283: Car Dealership
 
 CLASS Customer
     ATTRIBUTES
-        customerID : Integer
-        customerName : String
-        phoneNumber : String
+        PRIVATE customerID : Integer
+        PRIVATE customerName : String
+        PRIVATE phoneNumber : String
 
     CONSTRUCTOR Customer(id, name, phone)
         SET customerID TO id
@@ -867,9 +868,9 @@ END CLASS
 
 CLASS Model
     ATTRIBUTES
-        modelID : Integer
-        modelName : String
-        basePrice : Double
+        PRIVATE modelID : Integer
+        PRIVATE modelName : String
+        PRIVATE basePrice : Double
 
     CONSTRUCTOR Model(id, name, price)
         SET modelID TO id
@@ -881,11 +882,11 @@ END CLASS
 
 CLASS Vehicle
     ATTRIBUTES
-        vehicleID : Integer
-        specifications : String
-        model : Model
-        listedPrice : Double
-        availability : Boolean
+        PRIVATE vehicleID : Integer
+        PRIVATE specifications : String
+        PRIVATE model : Model
+        PRIVATE listedPrice : Double
+        PRIVATE availability : Boolean
 
     CONSTRUCTOR Vehicle(id, specs, model, price)
         SET vehicleID TO id
@@ -909,9 +910,9 @@ END CLASS
 
 CLASS AddOnFeature
     ATTRIBUTES
-        featureID : Integer
-        featureName : String
-        cost : Double
+        PRIVATE featureID : Integer
+        PRIVATE featureName : String
+        PRIVATE cost : Double
 
     CONSTRUCTOR AddOnFeature(id, name, cost)
         SET featureID TO id
@@ -923,11 +924,11 @@ END CLASS
 
 CLASS Sale
     ATTRIBUTES
-        saleID : Integer
-        customer : Customer
-        vehicle : Vehicle
-        agreedPrice : Double
-        addOns : List of AddOnFeature
+        PRIVATE saleID : Integer
+        PRIVATE customer : Customer
+        PRIVATEvehicle : Vehicle
+        PRIVATE agreedPrice : Double
+        PRIVATE addOns : List of AddOnFeature
 
     CONSTRUCTOR Sale(id, customer, vehicle, price)
         SET saleID TO id
@@ -1003,8 +1004,8 @@ Task 284: Wedding Planning
 
 CLASS Couple
     ATTRIBUTES
-        coupleID : Integer
-        coupleNames : String
+        PRIVATE coupleID : Integer
+        PRIVATE coupleNames : String
 
     CONSTRUCTOR Couple(id, names)
         SET coupleID TO id
@@ -1015,8 +1016,8 @@ END CLASS
 
 CLASS Guest
     ATTRIBUTES
-        guestID : Integer
-        guestName : String
+        PRIVATE guestID : Integer
+        PRIVATE guestName : String
 
     CONSTRUCTOR Guest(id, name)
         SET guestID TO id
@@ -1027,11 +1028,11 @@ END CLASS
 
 CLASS Vendor
     ATTRIBUTES
-        vendorID : Integer
-        vendorName : String
-        contactNumber : String
-        specialty : String
-        bookedDates : List of String
+        PRIVATE vendorID : Integer
+        PRIVATE vendorName : String
+        PRIVATE contactNumber : String
+        PRIVATE specialty : String
+        PRIVATE bookedDates : List of String
 
     CONSTRUCTOR Vendor(id, name, contact, specialty)
         SET vendorID TO id
@@ -1057,11 +1058,11 @@ END CLASS
 
 CLASS Task
     ATTRIBUTES
-        taskID : Integer
-        taskName : String
-        cost : Double
-        isDone : Boolean
-        vendor : Vendor
+        PRIVATE taskID : Integer
+        PRIVATE taskName : String
+        PRIVATE cost : Double
+        PRIVATE isDone : Boolean
+        PRIVATE vendor : Vendor
 
     CONSTRUCTOR Task(id, name, cost, vendor)
         SET taskID TO id
@@ -1079,13 +1080,13 @@ END CLASS
 
 CLASS Event
     ATTRIBUTES
-        eventID : Integer
-        eventDate : String
-        budget : Double
-        couple : Couple
-        tasks : List of Task
-        guests : List of Guest
-        totalSpent : Double
+        PRIVATE eventID : Integer
+        PRIVATE eventDate : String
+        PRIVATE budget : Double
+        PRIVATE couple : Couple
+        PRIVATE tasks : List of Task
+        PRIVATE guests : List of Guest
+        PRIVATE totalSpent : Double
 
     CONSTRUCTOR Event(id, date, budget, couple)
         SET eventID TO id
@@ -1171,8 +1172,8 @@ Task 285: Concert Ticketing
 
 CLASS Artist
     ATTRIBUTES
-        artistID : Integer
-        artistName : String
+        PRIVATE artistID : Integer
+        PRIVATE artistName : String
 
     CONSTRUCTOR Artist(id, name)
         SET artistID TO id
@@ -1183,10 +1184,10 @@ END CLASS
 
 CLASS Venue
     ATTRIBUTES
-        venueID : Integer
-        venueName : String
-        seatingChart : List of String
-        bookedDates : List of String
+        PRIVATE venueID : Integer
+        PRIVATE venueName : String
+        PRIVATE seatingChart : List of String
+        PRIVATE bookedDates : List of String
 
     CONSTRUCTOR Venue(id, name, seating)
         SET venueID TO id
@@ -1211,10 +1212,10 @@ END CLASS
 
 CLASS TicketTier
     ATTRIBUTES
-        tierName : String
-        price : Double
-        totalSeats : Integer
-        soldSeats : Integer
+        PRIVATE tierName : String
+        PRIVATE price : Double
+        PRIVATE totalSeats : Integer
+        PRIVATE soldSeats : Integer
 
     CONSTRUCTOR TicketTier(name, price, seats)
         SET tierName TO name
@@ -1231,10 +1232,10 @@ END CLASS
 
 CLASS Ticket
     ATTRIBUTES
-        ticketID : Integer
-        seatNumber : String
-        price : Double
-        tier : TicketTier
+        PRIVATE ticketID : Integer
+        PRIVATE seatNumber : String
+        PRIVATE price : Double
+        PRIVATE tier : TicketTier
 
     CONSTRUCTOR Ticket(id, seat, tier)
         SET ticketID TO id
@@ -1249,12 +1250,12 @@ END CLASS
 
 CLASS Concert
     ATTRIBUTES
-        concertID : Integer
-        concertDate : String
-        artist : Artist
-        venue : Venue
-        tiers : List of TicketTier
-        soldSeats : List of String
+        PRIVATE concertID : Integer
+        PRIVATE concertDate : String
+        PRIVATE artist : Artist
+        PRIVATE venue : Venue
+        PRIVATE tiers : List of TicketTier
+        PRIVATE soldSeats : List of String
 
     CONSTRUCTOR Concert(id, date, artist, venue)
         SET concertID TO id
@@ -1338,10 +1339,10 @@ Task 286: Software Sprint
 
 CLASS Developer
     ATTRIBUTES
-        developerID : Integer
-        developerName : String
-        capacity : Integer
-        assignedTasks : List of Task
+        PRIVATE developerID : Integer
+        PRIVATE developerName : String
+        PRIVATE capacity : Integer
+        PRIVATE assignedTasks : List of Task
 
     CONSTRUCTOR Developer(id, name, capacity)
         SET developerID TO id
@@ -1366,10 +1367,10 @@ END CLASS
 
 CLASS Task
     ATTRIBUTES
-        taskID : Integer
-        taskName : String
-        status : String   // Backlog → InProgress → Testing → Done
-        developer : Developer
+        PRIVATE taskID : Integer
+        PRIVATE taskName : String
+        PRIVATE status : String   // Backlog → InProgress → Testing → Done
+        PRIVATE developer : Developer
 
     CONSTRUCTOR Task(id, name)
         SET taskID TO id
@@ -1426,9 +1427,9 @@ END CLASS
 
 CLASS Sprint
     ATTRIBUTES
-        sprintID : Integer
-        tasks : List of Task
-        backlog : Backlog
+        PRIVATE sprintID : Integer
+        PRIVATE tasks : List of Task
+        PRIVATE backlog : Backlog
 
     CONSTRUCTOR Sprint(id, backlog)
         SET sprintID TO id
