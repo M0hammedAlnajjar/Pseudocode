@@ -4,10 +4,10 @@ BEGIN
 
 CLASS Owner
     ATTRIBUTES
-        PRIVATE ownerID : Integer
-        PRIVATE name : String
-        PRIVATE phoneNumber : String
-        PRIVATE pets : List of Pet
+       Private ownerID : Integer
+       Private name : String
+       Private phoneNumber : String
+       Private pets : List of Pet
 
     CONSTRUCTOR Owner(id, name, phone)
         SET ownerID TO id
@@ -17,15 +17,15 @@ CLASS Owner
     END CONSTRUCTOR
 
     PUBLIC METHOD addPet(pet)
-        ADD pet TO pets
+        Add pet TO pets
     END METHOD
 END CLASS
 
 
 CLASS Species
     ATTRIBUTES
-        PRIVATE speciesName : String
-        PRIVATE careRequirements : String
+        Private speciesName : String
+        Private careRequirements : String
 
     CONSTRUCTOR Species(name, care)
         SET speciesName TO name
@@ -36,11 +36,11 @@ END CLASS
 
 CLASS Pet
     ATTRIBUTES
-        PRIVATE petID : Integer
-        PRIVATE name : String
-        PRIVATE dateOfBirth : Date
-        PRIVATE species : Species
-        PRIVATE medicalHistory : List of Examination
+        Private petID : Integer
+        Private name : String
+        Private dateOfBirth : Date
+        Private species : Species
+        Private medicalHistory : List of Examination
 
     CONSTRUCTOR Pet(id, name, dob, species)
         SET petID TO id
@@ -54,19 +54,19 @@ CLASS Pet
         RETURN CurrentDate - dateOfBirth
     END METHOD
 
-    PUBLIC METHOD addExamination(exam)
-        ADD exam TO medicalHistory
+    METHOD addExamination(exam)
+        Add exam TO medicalHistory
     END METHOD
 END CLASS
 
 
 CLASS Examination
     ATTRIBUTES
-        PRIVATE examID : Integer
-        PRIVATE diagnosis : String
-        PRIVATE vitalSigns : String
-        PRIVATE urgent : Boolean
-        PRIVATE treatments : List of Treatment
+        examID : Integer
+        diagnosis : String
+        vitalSigns : String
+        urgent : Boolean
+        treatments : List of Treatment
 
     CONSTRUCTOR Examination(id, diagnosis, vitalSigns)
         SET examID TO id
@@ -77,13 +77,13 @@ CLASS Examination
     END CONSTRUCTOR
 
     PUBLIC METHOD checkUrgency()
-        IF vitalSigns ARE outside safe range THEN
+        IF vitalSigns are outside safe range THEN
             SET urgent TO True
         END IF
     END METHOD
 
     PUBLIC METHOD addTreatment(treatment)
-        ADD treatment TO treatments
+        Add treatment TO treatments
     END METHOD
 END CLASS
 
@@ -117,11 +117,7 @@ CLASS Visit
     END CONSTRUCTOR
 
     PUBLIC METHOD getVisitTotal()
-        SET total TO 0
-        FOR EACH treatment IN examination.treatments
-            SET total TO total + treatment.cost
-        END FOR
-        RETURN total
+        RETURN Sum of treatment.cost
     END METHOD
 END CLASS
 
@@ -129,28 +125,44 @@ END CLASS
 START
 BEGIN
 
-CREATE OBJECT owner1 OF Owner(101, "Ali Ahmed", "91234567")
+CREATE OBJECT owner1 OF Owner
+SET owner1.ownerID TO 101
+SET owner1.name TO "Ali Ahmed"
+SET owner1.phoneNumber TO "91234567"
 
-CREATE OBJECT species1 OF Species("Dog", "Regular Vaccination")
+CREATE OBJECT species1 OF Species
+SET species1.speciesName TO "Dog"
+SET species1.careRequirements TO "Regular Vaccination"
 
-CREATE OBJECT pet1 OF Pet(201, "Max", "15/05/2022", species1)
+CREATE OBJECT pet1 OF Pet
+SET pet1.petID TO 201
+SET pet1.name TO "Max"
+SET pet1.dateOfBirth TO "15/05/2022"
+SET pet1.species TO species1
 
 owner1.addPet(pet1)
 
-CREATE OBJECT exam1 OF Examination(301, "Fever", "High Temperature")
+CREATE OBJECT exam1 OF Examination
+SET exam1.examID TO 301
+SET exam1.diagnosis TO "Fever"
+SET exam1.vitalSigns TO "High Temperature"
 
 exam1.checkUrgency()
 
-CREATE OBJECT treatment1 OF Treatment(401, "Antibiotics", 15.00)
+CREATE OBJECT treatment1 OF Treatment
+SET treatment1.treatmentID TO 401
+SET treatment1.description TO "Antibiotics"
+SET treatment1.cost TO 15.00
 
 exam1.addTreatment(treatment1)
 
-pet1.addExamination(exam1)
-
-CREATE OBJECT visit1 OF Visit(501, owner1, pet1, exam1)
+CREATE OBJECT visit1 OF Visit
+SET visit1.visitID TO 501
+SET visit1.owner TO owner1
+SET visit1.pet TO pet1
+SET visit1.examination TO exam1
 
 DISPLAY pet1.getAge()
-
 DISPLAY visit1.getVisitTotal()
 
 END
@@ -158,7 +170,12 @@ STOP
 END PROGRAM
 
 
+
+
+
 Task 279: Movie Theater
+```text
+BEGIN
 
 CLASS Film
     ATTRIBUTES
@@ -166,27 +183,31 @@ CLASS Film
         PRIVATE title : String
         PRIVATE genre : String
         PRIVATE duration : Integer
+
     CONSTRUCTOR Film(id, title, genre, duration)
-        filmID to id
-        SET this.title to title
-        SET this.genre to genre
-        SET this.duration to duration
+        SET filmID TO id
+        SET this.title TO title
+        SET this.genre TO genre
+        SET this.duration TO duration
     END CONSTRUCTOR
 END CLASS
 
+
 CLASS Screen
     ATTRIBUTES
-       PRIVATE  screenID : Integer
-       PRIVATE screenName : String
-       PRIVATE  capacity : Integer
-       PRIVATE  seatingLayout : String
+        PRIVATE screenID : Integer
+        PRIVATE screenName : String
+        PRIVATE capacity : Integer
+        PRIVATE seatingLayout : String
+
     CONSTRUCTOR Screen(id, name, capacity, layout)
-        screenID to id
-        screenName to name
-        SET this.capacity to capacity
-        SET seatingLayout to layout
+        SET screenID TO id
+        SET screenName TO name
+        SET this.capacity TO capacity
+        SET seatingLayout TO layout
     END CONSTRUCTOR
 END CLASS
+
 
 CLASS Showtime
     ATTRIBUTES
@@ -196,21 +217,31 @@ CLASS Showtime
         PRIVATE film : Film
         PRIVATE screen : Screen
         PRIVATE tickets : List of Ticket
+
     CONSTRUCTOR Showtime(id, start, end, film, screen)
-        showtimeID to id
-        startTime to start
-        endTime to end
-        SET this.film to film
-        SET this.screen to screen
-        tickets to Empty List
+        SET showtimeID TO id
+
+        IF screen already has a showtime overlapping start and end THEN
+            DISPLAY "Error: Overlapping showtime."
+            STOP
+        END IF
+
+        SET startTime TO start
+        SET endTime TO end
+        SET this.film TO film
+        SET this.screen TO screen
+        SET tickets TO Empty List
     END CONSTRUCTOR
+
     PUBLIC METHOD addTicket(ticket)
-        Add ticket TO tickets
+        ADD ticket TO tickets
     END METHOD
-    METHOD getAvailableSeats()
+
+    PUBLIC METHOD getAvailableSeats()
         RETURN screen.capacity - tickets.size
     END METHOD
 END CLASS
+
 
 CLASS Ticket
     ATTRIBUTES
@@ -218,53 +249,60 @@ CLASS Ticket
         PRIVATE customerName : String
         PRIVATE seatNumber : String
         PRIVATE showtime : Showtime
+
     CONSTRUCTOR Ticket(id, customer, seat, showtime)
-        ticketID  id
-        customerName to customer
-        seatNumber to seat
-        SET this.showtime ← showtime
+        SET ticketID TO id
+        SET customerName TO customer
+        SET seatNumber TO seat
+        SET this.showtime TO showtime
     END CONSTRUCTOR
-    METHOD reserveSeat()
-        Display "Seat Reserved"
+
+    PUBLIC METHOD reserveSeat()
+        IF showtime.getAvailableSeats() > 0 THEN
+            showtime.addTicket(this)
+            DISPLAY "Seat Reserved"
+        ELSE
+            DISPLAY "No seats available"
+        END IF
     END METHOD
 END CLASS
+
 
 START
 BEGIN
 
-CREATE OBJECT teacher1 OF Teacher
-SET teacher1.teacherID TO 101
-SET teacher1.teacherName TO "Ali Hassan"
+CREATE OBJECT film1 OF Film(101, "Avatar", "Science Fiction", 180)
 
-CREATE OBJECT subject1 OF Subject
-SET subject1.subjectName TO "Mathematics"
-SET subject1.syllabus TO "Algebra and Geometry"
+CREATE OBJECT screen1 OF Screen(1, "Screen A", 100, "Standard")
 
-CREATE OBJECT class1 OF SchoolClass
-SET class1.classID TO 201
-SET class1.className TO "Grade 10A"
-SET class1.maxClassSize TO 30
-SET class1.schedule TO "Sunday 8:00 AM"
+CREATE OBJECT showtime1 OF Showtime(
+    201,
+    "10/06/2026 18:00",
+    "10/06/2026 21:00",
+    film1,
+    screen1
+)
 
-CREATE OBJECT student1 OF Student
-SET student1.studentID TO 301
-SET student1.studentName TO "Ahmed Ali"
-SET student1.personalRecord TO "Excellent"
+CREATE OBJECT ticket1 OF Ticket(
+    301,
+    "Ali Ahmed",
+    "A10",
+    showtime1
+)
 
-class1.enrollStudent(student1)
+ticket1.reserveSeat()
 
-DISPLAY student1.calculateAverage()
+DISPLAY showtime1.getAvailableSeats()
 
 END
 STOP
-
 END PROGRAM
 
 
 
 
-
-Task 280: Warehouse Inventory 
+```text
+BEGIN
 
 CLASS Vendor
     ATTRIBUTES
@@ -282,12 +320,24 @@ CLASS Vendor
         SET products TO Empty List
     END CONSTRUCTOR
 
-    METHOD addProduct(product)
-        Add product TO products
+    PUBLIC METHOD addProduct(product)
+        ADD product TO products
     END METHOD
 
-    METHOD updateReliability(newRating)
-        SET reliabilityRating TO newRating
+    PUBLIC METHOD updateReliability(deliverySuccessful)
+        IF deliverySuccessful EQUALS True THEN
+            SET reliabilityRating TO reliabilityRating + 0.1
+        ELSE
+            SET reliabilityRating TO reliabilityRating - 0.1
+        END IF
+
+        IF reliabilityRating > 5.0 THEN
+            SET reliabilityRating TO 5.0
+        END IF
+
+        IF reliabilityRating < 0.0 THEN
+            SET reliabilityRating TO 0.0
+        END IF
     END METHOD
 END CLASS
 
@@ -352,68 +402,51 @@ CLASS Product
         SET stockMovements TO Empty List
     END CONSTRUCTOR
 
-    METHOD addBin(bin)
-        Add bin TO bins
+    PUBLIC METHOD addBin(bin)
+        ADD bin TO bins
     END METHOD
 
-    METHOD addStockMovement(movement)
-        IF movement.movementType = "OUT" AND
+    PUBLIC METHOD addStockMovement(movement)
+        IF movement.movementType EQUALS "OUT" AND
            movement.quantity > getTotalStock() THEN
-            Display "Insufficient Stock"
+            DISPLAY "Insufficient Stock"
         ELSE
-            Add movement TO stockMovements
+            ADD movement TO stockMovements
         END IF
     END METHOD
 
-    METHOD getTotalStock()
-        RETURN Sum of quantity in bins
+    PUBLIC METHOD getTotalStock()
+        RETURN Sum of quantity IN bins
     END METHOD
-
 END CLASS
 
 
 START
 BEGIN
 
-CREATE OBJECT vendor1 OF Vendor
-SET vendor1.vendorID TO 101
-SET vendor1.vendorName TO "ABC Suppliers"
-SET vendor1.contactNumber TO "91234567"
-SET vendor1.reliabilityRating TO 4.8
+CREATE OBJECT vendor1 OF Vendor(101, "ABC Suppliers", "91234567", 4.8)
 
-CREATE OBJECT category1 OF Category
-SET category1.categoryID TO 201
-SET category1.categoryName TO "Electronics"
+CREATE OBJECT category1 OF Category(201, "Electronics")
 
-CREATE OBJECT product1 OF Product
-SET product1.productID TO 301
-SET product1.productName TO "Laptop"
-SET product1.category TO category1
-SET product1.vendor TO vendor1
+CREATE OBJECT product1 OF Product(301, "Laptop", category1, vendor1)
 
 vendor1.addProduct(product1)
 
-CREATE OBJECT bin1 OF StorageBin
-SET bin1.binID TO 401
-SET bin1.location TO "A1"
-SET bin1.quantity TO 20
+CREATE OBJECT bin1 OF StorageBin(401, "A1", 20)
 
 product1.addBin(bin1)
 
-CREATE OBJECT movement1 OF StockMovement
-SET movement1.movementID TO 501
-SET movement1.movementType TO "OUT"
-SET movement1.quantity TO 5
-SET movement1.movementDate TO "01/07/2026"
+CREATE OBJECT movement1 OF StockMovement(501, "OUT", 5, "01/07/2026")
 
 product1.addStockMovement(movement1)
+
+vendor1.updateReliability(True)
 
 DISPLAY product1.getTotalStock()
 
 END
 STOP
-
-
+END PROGRAM
 
 
 Task 281: School Classroom
