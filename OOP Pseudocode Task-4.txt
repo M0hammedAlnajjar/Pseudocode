@@ -203,3 +203,111 @@ END
 STOP
 END PROGRAM
  
+
+
+Task 290: Taxi Company
+
+
+
+BEGIN
+
+CLASS Vehicle
+    ATTRIBUTES
+        PRIVATE vehicleID : Integer
+        PRIVATE model : String
+        PRIVATE plateNumber : String
+
+    CONSTRUCTOR Vehicle(id, model, plate)
+        SET vehicleID TO id
+        SET this.model TO model
+        SET plateNumber TO plate
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Driver
+    ATTRIBUTES
+        PRIVATE driverID : Integer
+        PRIVATE driverName : String
+        PRIVATE phoneNumber : String
+        PRIVATE vehicle : Vehicle
+        PRIVATE trips : List of Trip
+
+    CONSTRUCTOR Driver(id, name, phone, vehicle)
+        SET driverID TO id
+        SET driverName TO name
+        SET phoneNumber TO phone
+        SET this.vehicle TO vehicle
+        SET trips TO Empty List
+    END CONSTRUCTOR
+
+    METHOD addTrip(trip)
+        ADD trip TO trips
+    END METHOD
+END CLASS
+
+
+CLASS Passenger
+    ATTRIBUTES
+        PRIVATE passengerID : Integer
+        PRIVATE passengerName : String
+        PRIVATE phoneNumber : String
+
+    CONSTRUCTOR Passenger(id, name, phone)
+        SET passengerID TO id
+        SET passengerName TO name
+        SET phoneNumber TO phone
+    END CONSTRUCTOR
+END CLASS
+
+
+CLASS Trip
+    ATTRIBUTES
+        PRIVATE tripID : Integer
+        PRIVATE pickupLocation : String
+        PRIVATE dropoffLocation : String
+        PRIVATE fare : Double
+        PRIVATE driver : Driver
+        PRIVATE passenger : Passenger
+
+    CONSTRUCTOR Trip(id, pickup, dropoff, fare, driver, passenger)
+        SET tripID TO id
+        SET pickupLocation TO pickup
+        SET dropoffLocation TO dropoff
+        SET this.fare TO fare
+        SET this.driver TO driver
+        SET this.passenger TO passenger
+    END CONSTRUCTOR
+END CLASS
+
+
+START
+BEGIN
+
+    CREATE OBJECT vehicle1 OF Vehicle(101, "Toyota Corolla", "A12345")
+
+    CREATE OBJECT driver1 OF Driver(201, "Ahmed", "91234567", vehicle1)
+
+    CREATE OBJECT passenger1 OF Passenger(301, "Ali", "99887766")
+
+    CREATE OBJECT trip1 OF Trip(
+        401,
+        "Muscat Mall",
+        "Sultan Qaboos University",
+        7.500,
+        driver1,
+        passenger1
+    )
+
+    driver1.addTrip(trip1)
+
+    DISPLAY "Trip Created Successfully"
+
+END
+STOP
+
+END PROGRAM	
+
+
+
+
