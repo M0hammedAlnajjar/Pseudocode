@@ -51,7 +51,7 @@ CLASS Pet
     END CONSTRUCTOR
 
     PUBLIC METHOD getAge()
-        RETURN CurrentDate - dateOfBirth
+          RETURN difference in years between CurrentDate and dateOfBirth
     END METHOD
 
     METHOD addExamination(exam)
@@ -77,9 +77,9 @@ CLASS Examination
     END CONSTRUCTOR
 
     PUBLIC METHOD checkUrgency()
-        IF vitalSigns are outside safe range THEN
-            SET urgent TO True
-        END IF
+       IF vitalSigns = "High Temperature" OR vitalSigns = "Critical" THEN
+          SET urgent TO True
+       END IF
     END METHOD
 
     PUBLIC METHOD addTreatment(treatment)
@@ -116,10 +116,17 @@ CLASS Visit
         SET examination TO exam
     END CONSTRUCTOR
 
-    PUBLIC METHOD getVisitTotal()
-        RETURN Sum of treatment.cost
-    END METHOD
-END CLASS
+   METHOD getVisitTotal()
+
+    SET total TO 0
+
+    REPEAT FROM i = 0 TO examination.treatments.size - 1
+        SET total TO total + examination.treatments[i].cost
+    END REPEAT
+
+    RETURN total
+
+END METHODEND CLASS
 
 
 START
@@ -174,8 +181,6 @@ END PROGRAM
 
 
 Task 279: Movie Theater
-```text
-BEGIN
 
 CLASS Film
     ATTRIBUTES
@@ -301,7 +306,7 @@ END PROGRAM
 
 
 
-```text
+
 BEGIN
 
 CLASS Vendor
@@ -656,6 +661,19 @@ CLASS Student
     END METHOD
 END CLASS
 
+CLASS Teacher
+    ATTRIBUTES
+        PRIVATE teacherID : Integer
+        PRIVATE teacherName : String
+        PRIVATE subject : Subject
+
+    CONSTRUCTOR Teacher(id, name, subject)
+        SET teacherID TO id
+        SET teacherName TO name
+        SET this.subject TO subject
+    END CONSTRUCTOR
+END CLASS
+
 
 CLASS SchoolClass
     ATTRIBUTES
@@ -824,11 +842,11 @@ CLASS Policy
     END METHOD
 
     METHOD getTotalRemainingCoverage()
-        total = 0
+       SET total TO 0
 
-        FOR EACH c IN coverages
-            total = total + c.getRemainingLimit()
-        END FOR
+        REPEAT FROM i = 0 TO coverages.size - 1
+    		total = total + coverages[i].getRemainingLimit()
+	END REPEAT
 
         RETURN total
     END METHOD
@@ -1116,32 +1134,37 @@ CLASS Event
         SET totalSpent TO 0
     END CONSTRUCTOR
 
-    METHOD addTask(task)
-        IF (totalSpent + task.cost) > budget THEN
-            DISPLAY "Budget Exceeded"
-        ELSE
-            Add task TO tasks
-            SET totalSpent TO totalSpent + task.cost
-            task.vendor.bookDate(eventDate)
-        END IF
-    END METHOD
+   METHOD addTask(task)
+    IF (totalSpent + task.cost) > budget THEN
+        DISPLAY "Budget Exceeded"
+    ELSE IF task.vendor.isAvailable(eventDate) = False THEN
+        DISPLAY "Vendor Not Available"
+    ELSE
+        Add task TO tasks
+        SET totalSpent TO totalSpent + task.cost
+        task.vendor.bookDate(eventDate)
+    END IF
+   END METHOD
 
     METHOD addGuest(guest)
         Add guest TO guests
     END METHOD
 
     METHOD calculateCompletion()
-        doneCount = 0
+    SET doneCount TO 0
 
-        FOR EACH t IN tasks
-            IF t.isDone = True THEN
-                doneCount = doneCount + 1
-            END IF
-        END FOR
+    IF tasks.size = 0 THEN
+        RETURN 0
+    END IF
 
-        RETURN (doneCount / tasks.size) * 100
+    REPEAT FROM i = 0 TO tasks.size - 1
+        IF tasks[i].isDone = True THEN
+            SET doneCount TO doneCount + 1
+        END IF
+    END REPEAT
+
+     RETURN (doneCount / tasks.size) * 100
     END METHOD
-END CLASS
 
 
 START
@@ -1261,7 +1284,7 @@ CLASS Ticket
         SET this.tier TO tier
         SET price TO tier.price
 
-        tier.soldSeats = tier.soldSeats + 1
+        SET tier.soldSeats TO tier.soldSeats + 1
     END CONSTRUCTOR
 END CLASS
 
@@ -1290,26 +1313,35 @@ CLASS Concert
         Add tier TO tiers
     END METHOD
 
-    METHOD sellTicket(seatNumber, tier)
-        IF seatNumber IN soldSeats THEN
-            DISPLAY "Seat already sold"
-        ELSE IF tier.getRemainingSeats() <= 0 THEN
-            DISPLAY "Tier full"
-        ELSE
-            Add seatNumber TO soldSeats
-            CREATE Ticket
-        END IF
+   METHOD sellTicket(seatNumber, tier)
+
+    IF seatNumber IN soldSeats THEN
+        DISPLAY "Seat already sold"
+
+    ELSE IF tier.getRemainingSeats() <= 0 THEN
+        DISPLAY "Tier full"
+
+    ELSE
+        ADD seatNumber TO soldSeats
+
+        CREATE OBJECT ticket1 OF Ticket(1, seatNumber, tier)
+
+        DISPLAY "Ticket Sold"
+    END IF
+
     END METHOD
 
-    METHOD getRemainingTickets()
-        total = 0
+  METHOD getRemainingTickets()
 
-        FOR EACH t IN tiers
-            total = total + t.getRemainingSeats()
-        END FOR
+    SET total TO 0
 
-        RETURN total
-    END METHOD
+    FOR EACH t IN tiers
+        SET total TO total + t.getRemainingSeats()
+    END FOR
+
+    RETURN total
+
+END METHOD
 END CLASS
 
 
@@ -1455,22 +1487,32 @@ CLASS Sprint
         SET tasks TO Empty List
     END CONSTRUCTOR
 
-    METHOD pullTask()
+   METHOD pullTask()
+    IF backlog.tasks.size = 0 THEN
+        DISPLAY "No tasks in backlog"
+    ELSE
         task = backlog.getNextTask()
         Add task TO tasks
+    END IF
+   END METHOD
+
+   METHOD calculateProgress()
+
+    SET doneCount TO 0
+
+    IF tasks.size = 0 THEN
+        RETURN 0
+    END IF
+
+    REPEAT FROM i = 0 TO tasks.size - 1
+        IF tasks[i].status = "Done" THEN
+            SET doneCount TO doneCount + 1
+        END IF
+    END REPEAT
+
+    RETURN (doneCount / tasks.size) * 100
     END METHOD
 
-    METHOD calculateProgress()
-        doneCount = 0
-
-        FOR EACH t IN tasks
-            IF t.status = "Done" THEN
-                doneCount = doneCount + 1
-            END IF
-        END FOR
-
-        RETURN (doneCount / tasks.size) * 100
-    END METHOD
 END CLASS
 
 
