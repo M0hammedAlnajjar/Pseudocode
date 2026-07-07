@@ -581,4 +581,111 @@ End Program
 
 
 
+Scenario 6: Gym
+Class Member
+    Attributes
+        memberID : Integer
+        name : String
+        phone : String
+        email : String
+        membership : Membership
+
+    Constructor(memberID : Integer, name : String,
+                phone : String, email : String,
+                membership : Membership)
+
+    Methods
+        enrolClass()
+        attendSession()
+End Class
+
+
+Class Membership
+    Attributes
+        membershipID : Integer
+        type : String
+        startDate : Date
+        expiryDate : Date
+
+    Constructor(membershipID : Integer, type : String,
+                startDate : Date, expiryDate : Date)
+
+    Methods
+        renewMembership()
+        checkExpiry()
+End Class
+
+
+Class FitnessClass
+    Attributes
+        classID : Integer
+        className : String
+        duration : Integer
+        trainer : Trainer
+
+    Constructor(classID : Integer, className : String,
+                duration : Integer, trainer : Trainer)
+
+    Methods
+        addSession()
+        assignTrainer()
+End Class
+
+
+Class ScheduledSession
+    Attributes
+        sessionID : Integer
+        sessionDate : Date
+        sessionTime : String
+        attendance : List<Member>
+
+    Constructor(sessionID : Integer,
+                sessionDate : Date,
+                sessionTime : String)
+
+    Methods
+        recordAttendance()
+        displayAttendance()
+End Class
+
+
+Class Trainer
+    Attributes
+        trainerID : Integer
+        name : String
+        specialization : String
+        phone : String
+
+    Constructor(trainerID : Integer,
+                name : String,
+                specialization : String,
+                phone : String)
+
+    Methods
+        teachClass()
+        updateDetails()
+End Class
+
+
+Start Program
+
+    Create membership1 as Membership(101, "Gold", "01/01/2026", "31/12/2026")
+
+    Create member1 as Member(1, "Ali Ahmed",
+        "98765432", "ali@email.com", membership1)
+
+    Create trainer1 as Trainer(201, "Sara Ali",
+        "Yoga", "91234567")
+
+    Create class1 as FitnessClass(301, "Yoga", 60, trainer1)
+
+    Create session1 as ScheduledSession(401,
+        "15/07/2026", "09:00 AM")
+
+    member1.enrolClass()
+
+    session1.recordAttendance()
+
+End Program
+
 
