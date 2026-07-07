@@ -689,3 +689,96 @@ Start Program
 End Program
 
 
+
+Scenario 7: Music Playlist App
+
+Class User
+    Attributes
+        userID : Integer
+        name : String
+        email : String
+
+    Constructor(userID : Integer, name : String, email : String)
+
+    Methods
+        createPlaylist()
+        deletePlaylist()
+End Class
+
+
+Class Playlist
+    Attributes
+        playlistID : Integer
+        playlistName : String
+        tracks : List<Track>
+
+    Constructor(playlistID : Integer, playlistName : String)
+
+    Methods
+        addTrack(track : Track)
+        removeTrack(track : Track)
+        playPlaylist()
+End Class
+
+
+Class Track
+    Attributes
+        trackID : Integer
+        title : String
+        duration : Double
+        artist : String
+        album : Album
+
+    Constructor(trackID : Integer, title : String,
+                duration : Double, artist : String,
+                album : Album)
+
+    Methods
+        playTrack()
+        displayTrack()
+End Class
+
+
+Class Album
+    Attributes
+        albumID : Integer
+        albumName : String
+        releaseYear : Integer
+        tracks : List<Track>
+
+    Constructor(albumID : Integer, albumName : String,
+                releaseYear : Integer)
+
+    Methods
+        addTrack(track : Track)
+        displayAlbum()
+End Class
+
+
+Start Program
+
+    Create user1 as User(1, "Ali Ahmed", "ali@email.com")
+
+    Create album1 as Album(101, "Greatest Hits", 2025)
+
+    Create track1 as Track(201, "Song One", 3.45,
+        "Artist A", album1)
+
+    Create track2 as Track(202, "Song Two", 4.10,
+        "Artist A", album1)
+
+    Create playlist1 as Playlist(301, "My Favorites")
+
+    playlist1.addTrack(track1)
+    playlist1.addTrack(track2)
+
+    user1.createPlaylist()
+
+    playlist1.playPlaylist()
+
+End Program
+
+
+
+
+
