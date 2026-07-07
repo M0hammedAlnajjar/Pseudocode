@@ -643,7 +643,6 @@ END PROGRAM
 
 Task 291: Co-working Space 
 
-BEGIN
 
 CLASS MembershipPlan
     ATTRIBUTES
@@ -654,7 +653,16 @@ CLASS MembershipPlan
         SET planName TO name
         SET monthlyQuota TO quota
     END CONSTRUCTOR
+
+    METHOD getPlanName()
+        RETURN planName
+    END METHOD
+
+    METHOD getMonthlyQuota()
+        RETURN monthlyQuota
+    END METHOD
 END CLASS
+
 
 
 CLASS Member
@@ -671,9 +679,24 @@ CLASS Member
         SET bookings TO Empty List
     END CONSTRUCTOR
 
-    METHOD addBooking(booking)
-        ADD booking TO bookings
+    METHOD getMemberName()
+        RETURN memberName
     END METHOD
+
+    METHOD getBookings()
+        RETURN bookings
+    END METHOD
+
+    METHOD addBooking(booking)
+
+        IF getRemainingHours() >= booking.duration THEN
+            ADD booking TO bookings
+        ELSE
+            DISPLAY "Booking exceeds monthly quota"
+        END IF
+
+    END METHOD
+
 
     METHOD getRemainingHours()
         SET usedHours TO 0
@@ -682,9 +705,11 @@ CLASS Member
             SET usedHours TO usedHours + bookings[i].duration
         END REPEAT
 
-        RETURN plan.monthlyQuota - usedHours
+        RETURN plan.getMonthlyQuota() - usedHours
     END METHOD
+
 END CLASS
+
 
 
 CLASS Room
@@ -699,20 +724,33 @@ CLASS Room
         SET bookings TO Empty List
     END CONSTRUCTOR
 
+
+    METHOD getRoomName()
+        RETURN roomName
+    END METHOD
+
+
     METHOD isAvailable(startTime, endTime)
+
         REPEAT FROM i = 0 TO bookings.size - 1
+
             IF startTime < bookings[i].endTime AND endTime > bookings[i].startTime THEN
                 RETURN False
             END IF
+
         END REPEAT
 
         RETURN True
+
     END METHOD
+
 
     METHOD addBooking(booking)
         ADD booking TO bookings
     END METHOD
+
 END CLASS
+
 
 
 CLASS Booking
@@ -724,27 +762,44 @@ CLASS Booking
         PRIVATE endTime : Integer
         PRIVATE duration : Integer
 
+
     CONSTRUCTOR Booking(id, member, room, startTime, endTime)
+
+        IF startTime >= endTime THEN
+            DISPLAY "Invalid time slot"
+            RETURN
+        END IF
+
         SET bookingID TO id
         SET this.member TO member
         SET this.room TO room
         SET this.startTime TO startTime
         SET this.endTime TO endTime
         SET duration TO endTime - startTime
+
     END CONSTRUCTOR
+
+
+    METHOD getDuration()
+        RETURN duration
+    END METHOD
+
 END CLASS
 
 
+
 START
+
 BEGIN
 
-    CREATE OBJECT plan1 OF MembershipPlan( "Standard", 20)
+    CREATE OBJECT plan1 OF MembershipPlan("Standard", 20)
 
     CREATE OBJECT member1 OF Member(101, "Ali", plan1)
 
     CREATE OBJECT room1 OF Room(201, "Meeting Room A")
 
-    IF member1.getRemainingHours() >= 2 AND room1.isAvailable(9, 11) THEN
+
+    IF member1.getRemainingHours() >= 2 AND room1.isAvailable(9,11) THEN
 
         CREATE OBJECT booking1 OF Booking(301, member1, room1, 9, 11)
 
@@ -759,13 +814,15 @@ BEGIN
 
     END IF
 
+
+    DISPLAY "Remaining Hours: "
     DISPLAY member1.getRemainingHours()
 
 END
+
 STOP
 
 END PROGRAM
-
 
 
 
