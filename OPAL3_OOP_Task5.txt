@@ -121,3 +121,136 @@ PRINT "Triangle Perimeter = " + triangle.calculatePerimeter()
 CALL canvas.displayShapes()
 
 END PROGRAM
+
+
+
+Task 294: Employee Payroll 
+
+
+
+
+PROGRAM EmployeePayroll
+
+CLASS Employee
+    ATTRIBUTES
+        name : String
+        id : Integer
+        hireDate : String
+
+    CONSTRUCTOR Employee(name : String, id : Integer, hireDate : String)
+        SET name = name
+        SET id = id
+        SET hireDate = hireDate
+
+    METHODS
+        calculateMonthlyPay() : Double
+END CLASS
+
+
+CLASS SalariedEmployee INHERITS Employee
+    ATTRIBUTES
+        monthlySalary : Double
+
+    CONSTRUCTOR SalariedEmployee(name : String, id : Integer,
+                                 hireDate : String, monthlySalary : Double)
+        CALL Employee(name, id, hireDate)
+        SET monthlySalary = monthlySalary
+
+    METHODS
+        calculateMonthlyPay() : Double
+            RETURN monthlySalary
+END CLASS
+
+
+CLASS HourlyEmployee INHERITS Employee
+    ATTRIBUTES
+        hourlyRate : Double
+        hoursWorked : Double
+
+    CONSTRUCTOR HourlyEmployee(name : String, id : Integer,
+                               hireDate : String,
+                               hourlyRate : Double,
+                               hoursWorked : Double)
+        CALL Employee(name, id, hireDate)
+        SET hourlyRate = hourlyRate
+        SET hoursWorked = hoursWorked
+
+    METHODS
+        calculateMonthlyPay() : Double
+            RETURN hourlyRate * hoursWorked
+END CLASS
+
+
+CLASS CommissionEmployee INHERITS Employee
+    ATTRIBUTES
+        basePay : Double
+        sales : Double
+        commissionRate : Double
+
+    CONSTRUCTOR CommissionEmployee(name : String, id : Integer,
+                                   hireDate : String,
+                                   basePay : Double,
+                                   sales : Double,
+                                   commissionRate : Double)
+        CALL Employee(name, id, hireDate)
+        SET basePay = basePay
+        SET sales = sales
+        SET commissionRate = commissionRate
+
+    METHODS
+        calculateMonthlyPay() : Double
+            RETURN basePay + (sales * commissionRate)
+END CLASS
+
+
+CLASS PayrollSystem
+    ATTRIBUTES
+        employees : List<Employee>
+
+    CONSTRUCTOR PayrollSystem()
+        CREATE empty employees list
+
+    METHODS
+        addEmployee(employee : Employee)
+            ADD employee TO employees
+
+        displayPayroll()
+            FOR EACH employee IN employees
+                PRINT employee.name
+                PRINT employee.calculateMonthlyPay()
+            END FOR
+END CLASS
+
+
+START PROGRAM
+
+DECLARE payroll : PayrollSystem
+SET payroll = NEW PayrollSystem()
+
+DECLARE emp1 : SalariedEmployee
+SET emp1 = NEW SalariedEmployee("Ahmed", 101, "2023-01-10", 5000)
+
+DECLARE emp2 : HourlyEmployee
+SET emp2 = NEW HourlyEmployee("Sara", 102, "2024-03-15", 20, 160)
+
+DECLARE emp3 : CommissionEmployee
+SET emp3 = NEW CommissionEmployee("Ali", 103, "2022-08-20", 3000, 10000, 0.10)
+
+CALL payroll.addEmployee(emp1)
+CALL payroll.addEmployee(emp2)
+CALL payroll.addEmployee(emp3)
+
+CALL payroll.displayPayroll()
+
+END PROGRAM
+
+
+
+
+
+
+
+
+
+
+
