@@ -373,3 +373,190 @@ END PROGRAM
 
 
 
+
+
+
+Task 296: Online Payment Method
+
+
+CLASS PaymentMethod
+
+    ATTRIBUTES
+        amount : Double
+        status : String
+
+    CONSTRUCTOR PaymentMethod(amount : Double)
+        SET this.amount = amount
+        SET this.status = "pending"
+
+    METHODS
+        processPayment()
+            PRINT "Processing payment"
+
+END CLASS
+
+
+
+CLASS CreditCardPayment INHERITS PaymentMethod
+
+    ATTRIBUTES
+        cardNumber : String
+        expiryDate : String
+
+    CONSTRUCTOR CreditCardPayment(amount : Double,cardNumber : String, expiryDate : String)
+
+        CALL SUPER(amount)
+        SET this.cardNumber = cardNumber
+        SET this.expiryDate = expiryDate
+
+
+    OVERRIDE METHOD processPayment()
+
+        IF cardNumber IS VALID AND expiryDate IS VALID THEN
+            SET status = "completed"
+            PRINT "Credit card payment completed"
+        ELSE
+            PRINT "Invalid card details"
+        END IF
+
+END CLASS
+
+
+
+CLASS BankTransferPayment INHERITS PaymentMethod
+
+    ATTRIBUTES
+        accountNumber : String
+
+    CONSTRUCTOR BankTransferPayment(amount : Double,accountNumber : String)
+
+        CALL SUPER(amount)
+        SET this.accountNumber = accountNumber
+
+
+    OVERRIDE METHOD processPayment()
+
+        IF accountNumber IS VALID THEN
+            PRINT "Processing bank transfer delay"
+            SET status = "completed"
+            PRINT "Bank transfer completed"
+        ELSE
+            PRINT "Invalid account number"
+        END IF
+
+END CLASS
+
+
+
+CLASS WalletPayment INHERITS PaymentMethod
+
+    ATTRIBUTES
+        walletBalance : Double
+
+    CONSTRUCTOR WalletPayment(amount : Double,walletBalance : Double)
+
+        CALL SUPER(amount)
+        SET this.walletBalance = walletBalance
+
+
+    OVERRIDE METHOD processPayment()
+
+        IF walletBalance >= amount THEN
+            SET status = "completed"
+            PRINT "Wallet payment completed"
+        ELSE
+            PRINT "Insufficient wallet balance"
+        END IF
+
+END CLASS
+
+
+
+CLASS Item
+
+    ATTRIBUTES
+        itemName : String
+        price : Double
+
+    CONSTRUCTOR Item(itemName : String, price : Double)
+
+        SET this.itemName = itemName
+        SET this.price = price
+
+END CLASS
+
+
+
+CLASS Order
+
+    ATTRIBUTES
+        items : List(Item)
+        payment : PaymentMethod
+
+    CONSTRUCTOR Order()
+
+        CREATE empty items list
+        SET payment = NULL
+
+
+    METHODS
+
+        addItem(item : Item)
+
+            ADD item TO items
+
+
+        checkout(paymentMethod : PaymentMethod)
+
+            SET payment = paymentMethod
+            CALL payment.processPayment()
+
+
+    METHOD calculateTotal() 
+
+    DECLARE total : Double
+    DECLARE i : Integer
+
+    SET total = 0
+    SET i = 0
+
+    WHILE i < size of items
+
+        SET total = total + items[i].price
+
+        SET i = i + 1
+
+    END WHILE
+
+    RETURN total
+
+END METHOD
+END CLASS
+
+
+START PROGRAM
+
+DECLARE order1 : Order
+SET order1 = NEW Order()
+
+DECLARE item1 : Item
+SET item1 = NEW Item("Laptop", 1000)
+
+DECLARE item2 : Item
+SET item2 = NEW Item("Mouse", 50)
+
+CALL order1.addItem(item1)
+CALL order1.addItem(item2)
+
+
+DECLARE payment1 : CreditCardPayment
+
+SET payment1 = NEW CreditCardPayment( 1050,"123456789", "12/2027")
+
+CALL order1.checkout(payment1)
+
+END PROGRAM
+
+
+
+
