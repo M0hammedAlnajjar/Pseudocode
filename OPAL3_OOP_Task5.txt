@@ -1074,7 +1074,6 @@ DECLARE chip1 : Chip
 
 SET chip1 = NEW Chip("EncryptedData123")
 
-
 DECLARE debit1 : DebitCard
 
 SET debit1 = NEW DebitCard("11112222","12/2028",chip1,5000)
@@ -1090,3 +1089,238 @@ CALL credit1.authorisePurchase(500)
 PRINT credit1.calculateOutstandingBalance()
 
 END PROGRAM
+
+
+
+
+Task 300: Hospital Staff Scheduling (Medium) 
+
+
+
+CLASS StaffMember
+
+    ATTRIBUTES
+        name : String
+        employeeID : Integer
+
+    CONSTRUCTOR StaffMember(name : String, employeeID : Integer)
+
+        SET this.name = name
+        SET this.employeeID = employeeID
+
+
+    METHODS
+
+        assignShift(shift : Shift)
+
+            PRINT "Staff assigned to shift"
+
+
+        calculatePay() : Double
+
+            RETURN 0
+
+END CLASS
+
+
+
+CLASS Doctor INHERITS StaffMember
+
+    ATTRIBUTES
+        doctorSalary : Double
+
+
+    CONSTRUCTOR Doctor(name : String,employeeID : Integer,doctorSalary : Double)
+
+        CALL SUPER(name, employeeID)
+
+        SET this.doctorSalary = doctorSalary
+
+
+    METHODS
+
+        approveTreatment()
+
+            PRINT "Doctor approves treatment"
+
+
+        diagnose()
+
+            PRINT "Doctor makes diagnosis"
+
+
+    OVERRIDE METHOD calculatePay() : Double
+
+        RETURN doctorSalary
+
+END CLASS
+
+
+
+CLASS Nurse INHERITS StaffMember
+
+    ATTRIBUTES
+        hourlyRate : Double
+
+
+    CONSTRUCTOR Nurse(name : String, employeeID : Integer,hourlyRate : Double)
+
+        CALL SUPER(name, employeeID)
+
+        SET this.hourlyRate = hourlyRate
+
+
+    METHODS
+
+        administerMedication()
+
+            PRINT "Nurse administers medication"
+
+
+        recordVitalSigns()
+
+            PRINT "Nurse records vital signs"
+
+
+    OVERRIDE METHOD calculatePay() : Double
+
+        RETURN hourlyRate
+
+END CLASS
+
+
+
+CLASS Surgeon INHERITS Doctor
+
+    ATTRIBUTES
+        operationBonus : Double
+
+
+    CONSTRUCTOR Surgeon(name : String,employeeID : Integer, doctorSalary : Double,operationBonus : Double)
+
+        CALL SUPER(name, employeeID, doctorSalary)
+
+        SET this.operationBonus = operationBonus
+
+
+    METHODS
+
+        performOperation()
+
+            PRINT "Surgeon performs operation"
+
+
+    OVERRIDE METHOD calculatePay() : Double
+
+        RETURN doctorSalary + operationBonus
+
+END CLASS
+
+
+
+CLASS Shift
+
+    ATTRIBUTES
+        startTime : String
+        endTime : String
+        ward : String
+
+
+    CONSTRUCTOR Shift(startTime : String,endTime : String,ward : String)
+
+        SET this.startTime = startTime
+        SET this.endTime = endTime
+        SET this.ward = ward
+
+END CLASS
+
+
+
+CLASS Ward
+
+    ATTRIBUTES
+        wardName : String
+        shifts : List(Shift)
+
+
+    CONSTRUCTOR Ward(wardName : String)
+
+        SET this.wardName = wardName
+
+        CREATE empty shifts list
+
+
+    METHODS
+
+        addShift(shift : Shift)
+
+            ADD shift TO shifts
+
+
+        displayShifts()
+
+            SET i = 0
+
+            WHILE i < size of shifts
+
+                PRINT shifts[i].startTime
+                PRINT shifts[i].endTime
+
+                SET i = i + 1
+
+            END WHILE
+
+END CLASS
+
+
+
+START PROGRAM
+
+
+DECLARE ward1 : Ward
+
+SET ward1 = NEW Ward("Emergency Ward")
+
+
+
+DECLARE shift1 : Shift
+
+SET shift1 = NEW Shift("08:00", "16:00", "Emergency Ward")
+
+
+CALL ward1.addShift(shift1)
+
+
+DECLARE doctor1 : Doctor
+
+SET doctor1 = NEW Doctor("Ahmed", 101, 5000)
+
+
+
+DECLARE nurse1 : Nurse
+
+SET nurse1 = NEW Nurse("Sara", 102, 50)
+
+
+
+DECLARE surgeon1 : Surgeon
+
+SET surgeon1 = NEW Surgeon("Ali", 103, 7000, 1000)
+
+
+
+CALL doctor1.approveTreatment()
+
+CALL nurse1.administerMedication()
+
+CALL surgeon1.performOperation()
+
+
+
+CALL ward1.displayShifts()
+
+
+
+END PROGRAM
+
+
