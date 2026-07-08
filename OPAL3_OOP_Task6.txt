@@ -527,3 +527,180 @@ CALL enclosure1.displayAnimals(
 
 
 END PROGRAM
+
+
+
+Task 306: Utility Billing System
+
+
+CLASS Bill
+
+    ATTRIBUTES
+        billingPeriod : String
+        dueDate : String
+        meterReading : MeterReading
+
+
+    CONSTRUCTOR Bill(billingPeriod : String,dueDate : String,meterReading : MeterReading)
+
+        SET this.billingPeriod = billingPeriod
+        SET this.dueDate = dueDate
+        SET this.meterReading = meterReading
+
+
+    METHODS
+
+        calculateAmountOwed() : Double
+
+            RETURN 0.0
+
+END CLASS
+
+
+
+CLASS ElectricityBill INHERITS Bill
+
+    ATTRIBUTES
+        unitsConsumed : Double
+        ratePerUnit : Double
+
+
+    CONSTRUCTOR ElectricityBill(billingPeriod : String,dueDate : String,meterReading : MeterReading,unitsConsumed : Double,ratePerUnit : Double)
+
+        CALL SUPER(billingPeriod, dueDate, meterReading)
+
+        SET this.unitsConsumed = unitsConsumed
+        SET this.ratePerUnit = ratePerUnit
+
+
+    OVERRIDE METHOD calculateAmountOwed() : Double
+
+        RETURN unitsConsumed * ratePerUnit
+
+END CLASS
+
+
+
+CLASS WaterBill INHERITS Bill
+
+    ATTRIBUTES
+        litersConsumed : Double
+        flatRate : Double
+        standingCharge : Double
+
+
+    CONSTRUCTOR WaterBill(billingPeriod : String,dueDate : String,meterReading : MeterReading,litersConsumed : Double,flatRate : Double,standingCharge : Double)
+
+        CALL SUPER(billingPeriod, dueDate, meterReading)
+
+        SET this.litersConsumed = litersConsumed
+        SET this.flatRate = flatRate
+        SET this.standingCharge = standingCharge
+
+
+    OVERRIDE METHOD calculateAmountOwed() : Double
+
+        RETURN (litersConsumed * flatRate) + standingCharge
+
+END CLASS
+
+
+
+CLASS GasBill INHERITS Bill
+
+    ATTRIBUTES
+        unitsConsumed : Double
+        ratePerUnit : Double
+        seasonalSurcharge : Double
+
+
+    CONSTRUCTOR GasBill(billingPeriod : String,dueDate : String, meterReading : MeterReading,unitsConsumed : Double,ratePerUnit : Double,seasonalSurcharge : Double)
+
+        CALL SUPER(billingPeriod, dueDate, meterReading)
+
+        SET this.unitsConsumed = unitsConsumed
+        SET this.ratePerUnit = ratePerUnit
+        SET this.seasonalSurcharge = seasonalSurcharge
+
+
+    OVERRIDE METHOD calculateAmountOwed() : Double
+
+        RETURN (unitsConsumed * ratePerUnit) + seasonalSurcharge
+
+END CLASS
+
+
+
+CLASS MeterReading
+
+    ATTRIBUTES
+        startReading : Double
+        endReading : Double
+
+
+    CONSTRUCTOR MeterReading(startReading : Double,endReading : Double)
+
+        SET this.startReading = startReading
+        SET this.endReading = endReading
+
+END CLASS
+
+
+
+CLASS CustomerAccount
+
+    ATTRIBUTES
+        bills : List<Bill>
+
+    CONSTRUCTOR CustomerAccount()
+
+        CREATE empty bills list
+
+
+    METHODS
+
+        addBill(bill : Bill)
+
+            ADD bill TO bills
+
+
+        displayBills()
+
+            SET i = 0
+
+            WHILE i < size of bills
+
+                PRINT bills[i].billingPeriod
+
+                PRINT bills[i].calculateAmountOwed()
+
+                SET i = i + 1
+
+            END WHILE
+
+END CLASS
+
+
+START PROGRAM
+
+DECLARE reading1 : MeterReading
+
+SET reading1 = NEW MeterReading(1000, 1200)
+
+DECLARE electricityBill1 : ElectricityBill
+
+SET electricityBill1 = NEW ElectricityBill("July 2026","31-07-2026",reading1,200,0.25)
+
+DECLARE account1 : CustomerAccount
+
+SET account1 = NEW CustomerAccount()
+
+
+CALL account1.addBill(electricityBill1)
+
+
+CALL account1.displayBills()
+
+
+END PROGRAM
+
