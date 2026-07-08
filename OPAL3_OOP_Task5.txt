@@ -248,9 +248,128 @@ END PROGRAM
 
 
 
+Task 295: Zoo Animal Enclosures
 
 
+CLASS Animal
+    ATTRIBUTES
+        name : String
+        age : Integer
+        dietType : String
 
+    CONSTRUCTOR Animal(name : String, age : Integer, dietType : String)
+        SET this.name = name
+        SET this.age = age
+        SET this.dietType = dietType
+
+    METHODS
+        makeSound()
+            PRINT "Animal makes a sound"
+
+        move()
+            PRINT "Animal moves"
+END CLASS
+
+
+CLASS Bird INHERITS Animal
+    ATTRIBUTES
+        canFly : Boolean
+        laysEggs : Boolean
+
+    CONSTRUCTOR Bird(name : String, age : Integer,dietType : String,canFly : Boolean,laysEggs : Boolean)
+
+        CALL SUPER(name, age, dietType)
+        SET this.canFly = canFly
+        SET this.laysEggs = laysEggs
+
+    OVERRIDE METHOD makeSound()
+        PRINT "Bird chirps"
+
+    OVERRIDE METHOD move()
+        PRINT "Bird flies"
+END CLASS
+
+
+CLASS Fish INHERITS Animal
+    ATTRIBUTES
+        swims : Boolean
+        hasGills : Boolean
+
+    CONSTRUCTOR Fish(name : String, age : Integer,dietType : String,swims : Boolean,hasGills : Boolean)
+        CALL SUPER(name, age, dietType)
+        SET this.swims = swims
+        SET this.hasGills = hasGills
+
+    OVERRIDE METHOD makeSound()
+        PRINT "Fish makes bubbling sound"
+
+    OVERRIDE METHOD move()
+        PRINT "Fish swims"
+END CLASS
+
+
+CLASS Mammal INHERITS Animal
+    ATTRIBUTES
+        hasFur : Boolean
+        givesLiveBirth : Boolean
+
+    CONSTRUCTOR Mammal(name : String, age : Integer,dietType : String, hasFur : Boolean, givesLiveBirth : Boolean)
+        CALL SUPER(name, age, dietType)
+        SET this.hasFur = hasFur
+        SET this.givesLiveBirth = givesLiveBirth
+
+    OVERRIDE METHOD makeSound()
+        PRINT "Mammal makes sound"
+
+    OVERRIDE METHOD move()
+        PRINT "Mammal walks"
+END CLASS
+
+
+CLASS Enclosure
+    ATTRIBUTES
+        temperatureSetting : Double
+        animals : List(Animal)
+
+    CONSTRUCTOR Enclosure(temperatureSetting : Double)
+        SET this.temperatureSetting = temperatureSetting
+        CREATE empty animals list
+
+    METHODS
+        addAnimal(animal : Animal)
+            ADD animal TO animals
+
+        displayAnimals()
+            repate animal IN animals
+                PRINT animal.name
+                CALL animal.makeSound()
+                CALL animal.move()
+            END FOR
+END CLASS
+
+
+START PROGRAM
+
+DECLARE enclosure1 : Enclosure
+SET enclosure1 = NEW Enclosure(25.5)
+
+DECLARE bird1 : Bird
+SET bird1 = NEW Bird("Parrot", 2, "Herbivore", TRUE, TRUE)
+
+DECLARE fish1 : Fish
+SET fish1 = NEW Fish("Goldfish", 1, "Omnivore", TRUE, TRUE)
+
+DECLARE mammal1 : Mammal
+SET mammal1 = NEW Mammal("Lion", 5, "Carnivore", TRUE, TRUE)
+
+
+CALL enclosure1.addAnimal(bird1)
+CALL enclosure1.addAnimal(fish1)
+CALL enclosure1.addAnimal(mammal1)
+CALL enclosure1.displayAnimals()
+
+
+END PROGRAM
 
 
 
