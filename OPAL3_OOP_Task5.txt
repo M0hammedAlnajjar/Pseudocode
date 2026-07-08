@@ -921,9 +921,172 @@ SET stop1 = NEW Stop("Main Street", "Package A")
 CALL route1.addStop(stop1)
 
 DECLARE deliveryTime : Double
-
 SET deliveryTime = van1.calculateDeliveryTime(100)
-
 PRINT deliveryTime
+END PROGRAM
+
+
+
+
+
+Task 299: Bank Cards  
+
+CLASS Card
+
+    ATTRIBUTES
+        cardNumber : String
+        expiryDate : String
+        status : String
+        chip : Chip
+
+    CONSTRUCTOR Card(cardNumber : String,expiryDate : String,chip : Chip)
+
+        SET this.cardNumber = cardNumber
+        SET this.expiryDate = expiryDate
+        SET this.status = "active"
+        SET this.chip = chip
+
+
+    METHODS
+
+        authorisePurchase(amount : Double) : Boolean
+
+            RETURN FALSE
+
+END CLASS
+
+
+
+CLASS DebitCard INHERITS Card
+
+    ATTRIBUTES
+        accountBalance : Double
+
+
+    CONSTRUCTOR DebitCard(cardNumber : String,expiryDate : String,chip : Chip,accountBalance : Double)
+
+        CALL SUPER(cardNumber, expiryDate, chip)
+
+        SET this.accountBalance = accountBalance
+
+
+    OVERRIDE METHOD authorisePurchase(amount : Double) : Boolean
+
+        IF accountBalance >= amount THEN
+
+            SET accountBalance = accountBalance - amount
+
+            PRINT "Debit purchase approved"
+
+            RETURN TRUE
+
+        ELSE
+
+            PRINT "Insufficient account balance"
+
+            RETURN FALSE
+
+        END IF
+
+END CLASS
+
+
+
+CLASS CreditCard INHERITS Card
+
+    ATTRIBUTES
+        creditLimit : Double
+        unpaidPurchases : List(Double)
+
+
+    CONSTRUCTOR CreditCard(cardNumber : String,expiryDate : String,chip : Chip,creditLimit : Double)
+
+        CALL SUPER(cardNumber, expiryDate, chip)
+
+        SET this.creditLimit = creditLimit
+
+        CREATE empty unpaidPurchases list
+
+
+
+    METHODS
+
+
+        OVERRIDE METHOD authorisePurchase(amount : Double) : Boolean
+
+            IF calculateOutstandingBalance() + amount <= creditLimit THEN
+
+                ADD amount TO unpaidPurchases
+
+                PRINT "Credit purchase approved"
+
+                RETURN TRUE
+
+            ELSE
+
+                PRINT "Credit limit exceeded"
+
+                RETURN FALSE
+
+            END IF
+
+
+
+        calculateOutstandingBalance() : Double
+
+            DECLARE total : Double
+
+            SET total = 0
+
+            SET i = 0
+
+            WHILE i < size of unpaidPurchases
+
+                SET total = total + unpaidPurchases[i]
+
+                SET i = i + 1
+
+            END WHILE
+
+
+            RETURN total
+
+END CLASS
+
+
+
+CLASS Chip
+
+    ATTRIBUTES
+        encryptedSecurityData : String
+
+    CONSTRUCTOR Chip(encryptedSecurityData : String)
+
+        SET this.encryptedSecurityData = encryptedSecurityData
+
+END CLASS
+
+
+
+START PROGRAM
+
+DECLARE chip1 : Chip
+
+SET chip1 = NEW Chip("EncryptedData123")
+
+
+DECLARE debit1 : DebitCard
+
+SET debit1 = NEW DebitCard("11112222","12/2028",chip1,5000)
+
+DECLARE credit1 : CreditCard
+
+SET credit1 = NEW CreditCard("33334444","10/2029", chip1,10000)
+
+CALL debit1.authorisePurchase(200)
+
+CALL credit1.authorisePurchase(500)
+
+PRINT credit1.calculateOutstandingBalance()
 
 END PROGRAM
