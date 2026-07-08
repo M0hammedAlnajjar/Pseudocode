@@ -349,7 +349,6 @@ CLASS Animal
 
 
     CONSTRUCTOR Animal(name : String,age : Integer,dietType : String)
-
         SET this.name = name
         SET this.age = age
         SET this.dietType = dietType
