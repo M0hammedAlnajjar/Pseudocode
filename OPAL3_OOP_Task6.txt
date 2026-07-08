@@ -704,3 +704,200 @@ CALL account1.displayBills()
 
 END PROGRAM
 
+Task 307: Ride-Sharing Vehicle Tiers  
+
+
+CLASS Ride
+
+    ATTRIBUTES
+        pickupLocation : String
+        dropOffLocation : String
+        route : Route
+
+
+    CONSTRUCTOR Ride(pickupLocation : String,
+                     dropOffLocation : String,
+                     route : Route)
+
+        SET this.pickupLocation = pickupLocation
+        SET this.dropOffLocation = dropOffLocation
+        SET this.route = route
+
+
+    METHODS
+
+        calculateFare() : Double
+
+            RETURN 0.0
+
+END CLASS
+
+
+
+CLASS StandardRide INHERITS Ride
+
+    ATTRIBUTES
+        distance : Double
+        ratePerKilometer : Double
+
+
+    CONSTRUCTOR StandardRide(pickupLocation : String,dropOffLocation : String,route : Route,distance : Double,ratePerKilometer : Double)
+
+        CALL SUPER(pickupLocation, dropOffLocation, route)
+
+        SET this.distance = distance
+        SET this.ratePerKilometer = ratePerKilometer
+
+
+    OVERRIDE METHOD calculateFare() : Double
+
+        RETURN distance * ratePerKilometer
+
+END CLASS
+
+
+
+CLASS PremiumRide INHERITS Ride
+
+    ATTRIBUTES
+        distance : Double
+        ratePerKilometer : Double
+        comfortSurcharge : Double
+
+
+    CONSTRUCTOR PremiumRide(pickupLocation : String,dropOffLocation : String,route : Route,distance : Double,ratePerKilometer : Double ,comfortSurcharge : Double)
+
+        CALL SUPER(pickupLocation, dropOffLocation, route)
+
+        SET this.distance = distance
+        SET this.ratePerKilometer = ratePerKilometer
+        SET this.comfortSurcharge = comfortSurcharge
+
+
+    OVERRIDE METHOD calculateFare() : Double
+
+        RETURN (distance * ratePerKilometer) + comfortSurcharge
+
+END CLASS
+
+
+
+CLASS SharedRide INHERITS StandardRide
+
+    ATTRIBUTES
+        numberOfPassengers : Integer
+
+
+    CONSTRUCTOR SharedRide(pickupLocation : String,dropOffLocation : String,route : Route,distance : Double,ratePerKilometer : Double,numberOfPassengers : Integer)
+
+        CALL SUPER(pickupLocation,
+                   dropOffLocation,
+                   route,
+                   distance,
+                   ratePerKilometer)
+
+        SET this.numberOfPassengers = numberOfPassengers
+
+
+    OVERRIDE METHOD calculateFare() : Double
+
+        RETURN (distance * ratePerKilometer) / numberOfPassengers
+
+END CLASS
+
+
+
+CLASS Waypoint
+
+    ATTRIBUTES
+        location : String
+
+
+    CONSTRUCTOR Waypoint(location : String)
+
+        SET this.location = location
+
+END CLASS
+
+
+
+CLASS Route
+
+    ATTRIBUTES
+        waypoints : List<Waypoint>
+
+
+    CONSTRUCTOR Route()
+
+        CREATE empty waypoints list
+
+
+    METHODS
+
+        addWaypoint(waypoint : Waypoint)
+
+            ADD waypoint TO waypoints
+
+
+END CLASS
+
+
+
+START PROGRAM
+
+DECLARE route1 : Route
+
+SET route1 = NEW Route()
+
+
+DECLARE point1 : Waypoint
+
+SET point1 = NEW Waypoint("City Center")
+
+CALL route1.addWaypoint(point1)
+
+
+
+DECLARE ride1 : StandardRide
+
+SET ride1 = NEW StandardRide("Mall","Airport",route1,15,2.5)
+
+DECLARE ride2 : PremiumRide
+
+SET ride2 = NEW PremiumRide("Hotel","Station",route1,20,3.5,10)
+
+DECLARE ride3 : SharedRide
+
+SET ride3 = NEW SharedRide("University","Downtown",route1,18,2.5,3)
+
+PRINT ride1.calculateFare()
+
+PRINT ride2.calculateFare()
+
+PRINT ride3.calculateFare()
+
+
+END PROGRAM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
