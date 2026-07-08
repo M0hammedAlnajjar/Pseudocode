@@ -1552,6 +1552,284 @@ END PROGRAM
 
 
 
+Task 302: Smart Home Devices
+
+
+CLASS Device
+
+    ATTRIBUTES
+        name : String
+        roomLocation : String
+        status : Boolean
+
+
+    CONSTRUCTOR Device(name : String,roomLocation : String, status : Boolean)
+
+        SET this.name = name
+        SET this.roomLocation = roomLocation
+        SET this.status = status
+
+
+    METHODS
+
+        getPowerUsage() : Double
+
+            RETURN 0.0
+
+
+END CLASS
+
+
+
+CLASS SmartLight INHERITS Device
+
+    ATTRIBUTES
+        brightnessLevel : Integer
+
+
+    CONSTRUCTOR SmartLight(name : String,
+                           roomLocation : String,
+                           status : Boolean,
+                           brightnessLevel : Integer)
+
+        CALL SUPER(name, roomLocation, status)
+
+        SET this.brightnessLevel = brightnessLevel
+
+
+    OVERRIDE METHOD getPowerUsage() : Double
+
+        RETURN brightnessLevel * 0.5
+
+
+END CLASS
+
+
+
+CLASS SmartThermostat INHERITS Device
+
+    ATTRIBUTES
+        targetTemperature : Double
+        currentTemperature : Double
+        heatingCoolingLevel : Integer
+
+
+    CONSTRUCTOR SmartThermostat(name : String,
+                                roomLocation : String,
+                                status : Boolean,
+                                targetTemperature : Double,
+                                currentTemperature : Double,
+                                heatingCoolingLevel : Integer)
+
+        CALL SUPER(name, roomLocation, status)
+
+        SET this.targetTemperature = targetTemperature
+        SET this.currentTemperature = currentTemperature
+        SET this.heatingCoolingLevel = heatingCoolingLevel
+
+
+    OVERRIDE METHOD getPowerUsage() : Double
+
+        RETURN heatingCoolingLevel * 2.0
+
+
+END CLASS
+
+
+
+CLASS SmartCamera INHERITS Device
+
+    ATTRIBUTES
+        recording : Boolean
+        storage : StorageUnit
+
+
+    CONSTRUCTOR SmartCamera(name : String,
+                            roomLocation : String,
+                            status : Boolean,
+                            recording : Boolean,
+                            storage : StorageUnit)
+
+        CALL SUPER(name, roomLocation, status)
+
+        SET this.recording = recording
+        SET this.storage = storage
+
+
+    OVERRIDE METHOD getPowerUsage() : Double
+
+        IF recording = TRUE THEN
+
+            RETURN 10.0
+
+        ELSE
+
+            RETURN 1.0
+
+        END IF
+
+
+    METHODS
+
+        startRecording()
+
+            IF storage.isFull() = FALSE THEN
+
+                SET recording = TRUE
+
+                PRINT "Camera is recording"
+
+            ELSE
+
+                PRINT "Storage is full"
+
+            END IF
+
+
+END CLASS
+
+
+
+CLASS StorageUnit
+
+    ATTRIBUTES
+        usedSpace : Double
+        totalSpace : Double
+
+
+    CONSTRUCTOR StorageUnit(usedSpace : Double,
+                            totalSpace : Double)
+
+        SET this.usedSpace = usedSpace
+        SET this.totalSpace = totalSpace
+
+
+
+    METHODS
+
+        isFull() : Boolean
+
+            IF usedSpace >= totalSpace THEN
+
+                RETURN TRUE
+
+            ELSE
+
+                RETURN FALSE
+
+            END IF
+
+
+END CLASS
+
+
+
+CLASS Room
+
+    ATTRIBUTES
+        roomName : String
+        devices : List<Device>
+
+
+    CONSTRUCTOR Room(roomName : String)
+
+        SET this.roomName = roomName
+
+        CREATE empty devices list
+
+
+
+    METHODS
+
+        addDevice(device : Device)
+
+            ADD device TO devices
+
+
+
+        displayDevices()
+
+            SET i = 0
+
+            WHILE i < size of devices
+
+                PRINT devices[i].name
+
+                PRINT devices[i].getPowerUsage()
+
+                SET i = i + 1
+
+            END WHILE
+
+END CLASS
+
+
+
+START PROGRAM
+
+
+DECLARE storage1 : StorageUnit
+
+SET storage1 = NEW StorageUnit(50, 100)
+
+
+
+DECLARE camera1 : SmartCamera
+
+SET camera1 = NEW SmartCamera(
+    "Security Camera",
+    "Living Room",
+    TRUE,
+    FALSE,
+    storage1
+)
+
+
+
+DECLARE light1 : SmartLight
+
+SET light1 = NEW SmartLight(
+    "Ceiling Light",
+    "Bedroom",
+    TRUE,
+    80
+)
+
+
+
+DECLARE thermostat1 : SmartThermostat
+
+SET thermostat1 = NEW SmartThermostat(
+    "Home Thermostat",
+    "Hall",
+    TRUE,
+    22.0,
+    20.0,
+    5
+)
+
+
+
+DECLARE room1 : Room
+
+SET room1 = NEW Room("Living Room")
+
+
+
+CALL room1.addDevice(camera1)
+
+CALL room1.addDevice(light1)
+
+CALL room1.addDevice(thermostat1)
+
+
+
+CALL room1.displayDevices()
+
+
+
+END PROGRAM
+
 
 
 
