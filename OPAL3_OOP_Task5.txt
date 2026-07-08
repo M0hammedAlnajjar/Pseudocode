@@ -1,135 +1,202 @@
-Task 293: Shape Drawing App :
-
+Task 293: Shape Drawing App
 
 
 CLASS Shape
+
     ATTRIBUTES
         color : String
         x : Integer
         y : Integer
 
-    CONSTRUCTOR Shape(color : String, x : Integer, y : Integer)
-        SET color = color
-        SET x = x
-        SET y = y
+
+    CONSTRUCTOR Shape(color : String,x : Integer,y : Integer)
+
+        SET this.color = color
+        SET this.x = x
+        SET this.y = y
+
 
     METHODS
+
         calculateArea() : Double
+
         calculatePerimeter() : Double
+
+            
+
 END CLASS
+
 
 
 CLASS Circle INHERITS Shape
+
     ATTRIBUTES
         radius : Double
 
-    CONSTRUCTOR Circle(color : String, x : Integer, y : Integer, radius : Double)
-        CALL Shape(color, x, y)
-        SET radius = radius
 
-    METHODS
-        calculateArea() : Double
-            RETURN 3.14 * radius * radius
+    CONSTRUCTOR Circle(color : String,x : Integer,y : Integer,radius : Double)
 
-        calculatePerimeter() : Double
-            RETURN 2 * 3.14 * radius
+        CALL SUPER(color, x, y)
+
+        SET this.radius = radius
+
+
+    OVERRIDE METHOD calculateArea() : Double
+
+        RETURN 3.14 * radius * radius
+
+
+    OVERRIDE METHOD calculatePerimeter() : Double
+
+        RETURN 2 * 3.14 * radius
+
 END CLASS
 
 
+
 CLASS Rectangle INHERITS Shape
+
     ATTRIBUTES
         width : Double
         height : Double
 
-    CONSTRUCTOR Rectangle(color : String, x : Integer, y : Integer,
-                          width : Double, height : Double)
-        CALL Shape(color, x, y)
-        SET width = width
-        SET height = height
 
-    METHODS
-        calculateArea() : Double
-            RETURN width * height
+    CONSTRUCTOR Rectangle(color : String,x : Integer,y : Integer,width : Double,height : Double)
 
-        calculatePerimeter() : Double
-            RETURN 2 * (width + height)
+        CALL SUPER(color, x, y)
+
+        SET this.width = width
+        SET this.height = height
+
+
+    OVERRIDE METHOD calculateArea() : Double
+
+        RETURN width * height
+
+
+    OVERRIDE METHOD calculatePerimeter() : Double
+
+        RETURN 2 * (width + height)
+
 END CLASS
 
 
+
 CLASS Triangle INHERITS Shape
+
     ATTRIBUTES
         side1 : Double
         side2 : Double
         side3 : Double
 
-    CONSTRUCTOR Triangle(color : String, x : Integer, y : Integer,
-                         side1 : Double, side2 : Double, side3 : Double)
-        CALL Shape(color, x, y)
-        SET side1 = side1
-        SET side2 = side2
-        SET side3 = side3
 
-    METHODS
-        calculateArea() : Double
-            RETURN "Use Heron's Formula"
+    CONSTRUCTOR Triangle(color : String,x : Integer,y : Integer,side1 : Double,side2 : Double,side3 : Double)
 
-        calculatePerimeter() : Double
-            RETURN side1 + side2 + side3
+        CALL SUPER(color, x, y)
+
+        SET this.side1 = side1
+        SET this.side2 = side2
+        SET this.side3 = side3
+
+
+    OVERRIDE METHOD calculateArea() : Double
+
+        SET s = (side1 + side2 + side3) / 2
+
+        RETURN sqrt(s * (s - side1) * (s - side2) * (s - side3))
+
+
+    OVERRIDE METHOD calculatePerimeter() : Double
+
+        RETURN side1 + side2 + side3
+
 END CLASS
 
 
 CLASS Canvas
+
     ATTRIBUTES
         shapes : List<Shape>
 
+
     CONSTRUCTOR Canvas()
+
         CREATE empty shapes list
 
+
     METHODS
+
         addShape(shape : Shape)
+
             ADD shape TO shapes
 
+
+
         displayShapes()
-            FOR EACH shape IN shapes
-                PRINT shape
-            END FOR
+
+            SET i = 0
+
+            WHILE i < size of shapes
+
+                PRINT shapes[i].color
+
+                PRINT shapes[i].calculateArea()
+
+                PRINT shapes[i].calculatePerimeter()
+
+                SET i = i + 1
+
+            END WHILE
+
 END CLASS
 
 
 START PROGRAM
 
 DECLARE canvas : Canvas
+
 SET canvas = NEW Canvas()
 
+
 DECLARE circle : Circle
-SET circle = NEW Circle("Red", 10, 20, 5)
+
+SET circle = NEW Circle("Red",10,20,5)
+
+
 
 DECLARE rectangle : Rectangle
-SET rectangle = NEW Rectangle("Blue", 30, 40, 8, 4)
+
+SET rectangle = NEW Rectangle("Blue", 30,40,8,4)
+
 
 DECLARE triangle : Triangle
-SET triangle = NEW Triangle("Green", 50, 60, 3, 4, 5)
 
+SET triangle = NEW Triangle("Green",50,60, 3, 4, 5)
 CALL canvas.addShape(circle)
 CALL canvas.addShape(rectangle)
 CALL canvas.addShape(triangle)
 
-PRINT "Circle Area = " + circle.calculateArea()
-PRINT "Rectangle Area = " + rectangle.calculateArea()
-PRINT "Triangle Perimeter = " + triangle.calculatePerimeter()
+
+
+PRINT "Circle Area = "
+PRINT circle.calculateArea()
+
+
+PRINT "Rectangle Area = "
+PRINT rectangle.calculateArea()
+
+
+PRINT "Triangle Perimeter = "
+PRINT triangle.calculatePerimeter()
 
 CALL canvas.displayShapes()
+
 
 END PROGRAM
 
 
 
 Task 294: Employee Payroll 
-
-
-
-
-PROGRAM EmployeePayroll
 
 CLASS Employee
     ATTRIBUTES
@@ -167,10 +234,7 @@ CLASS HourlyEmployee INHERITS Employee
         hourlyRate : Double
         hoursWorked : Double
 
-    CONSTRUCTOR HourlyEmployee(name : String, id : Integer,
-                               hireDate : String,
-                               hourlyRate : Double,
-                               hoursWorked : Double)
+    CONSTRUCTOR HourlyEmployee(name : String, id : Integer,hireDate : String,hourlyRate : Double,hoursWorked : Double)
         CALL Employee(name, id, hireDate)
         SET hourlyRate = hourlyRate
         SET hoursWorked = hoursWorked
@@ -243,7 +307,6 @@ CALL payroll.addEmployee(emp3)
 CALL payroll.displayPayroll()
 
 END PROGRAM
-
 
 
 
@@ -1587,10 +1650,7 @@ CLASS SmartLight INHERITS Device
         brightnessLevel : Integer
 
 
-    CONSTRUCTOR SmartLight(name : String,
-                           roomLocation : String,
-                           status : Boolean,
-                           brightnessLevel : Integer)
+    CONSTRUCTOR SmartLight(name : String,roomLocation : String,status : Boolean,brightnessLevel : Integer)
 
         CALL SUPER(name, roomLocation, status)
 
@@ -1614,12 +1674,8 @@ CLASS SmartThermostat INHERITS Device
         heatingCoolingLevel : Integer
 
 
-    CONSTRUCTOR SmartThermostat(name : String,
-                                roomLocation : String,
-                                status : Boolean,
-                                targetTemperature : Double,
-                                currentTemperature : Double,
-                                heatingCoolingLevel : Integer)
+    CONSTRUCTOR SmartThermostat(name : String,roomLocation : String,status : Boolean,targetTemperature : Double,
+    currentTemperature : Double,heatingCoolingLevel : Integer)
 
         CALL SUPER(name, roomLocation, status)
 
@@ -1636,7 +1692,6 @@ CLASS SmartThermostat INHERITS Device
 END CLASS
 
 
-
 CLASS SmartCamera INHERITS Device
 
     ATTRIBUTES
@@ -1644,11 +1699,8 @@ CLASS SmartCamera INHERITS Device
         storage : StorageUnit
 
 
-    CONSTRUCTOR SmartCamera(name : String,
-                            roomLocation : String,
-                            status : Boolean,
-                            recording : Boolean,
-                            storage : StorageUnit)
+    CONSTRUCTOR SmartCamera(name : String,roomLocation : String,status : Boolean,recording : Boolean,
+    storage : StorageUnit)
 
         CALL SUPER(name, roomLocation, status)
 
@@ -1697,12 +1749,10 @@ CLASS StorageUnit
         totalSpace : Double
 
 
-    CONSTRUCTOR StorageUnit(usedSpace : Double,
-                            totalSpace : Double)
+    CONSTRUCTOR StorageUnit(usedSpace : Double,totalSpace : Double)
 
         SET this.usedSpace = usedSpace
         SET this.totalSpace = totalSpace
-
 
 
     METHODS
@@ -1723,12 +1773,11 @@ CLASS StorageUnit
 END CLASS
 
 
-
 CLASS Room
 
     ATTRIBUTES
         roomName : String
-        devices : List<Device>
+        devices : List(Device)
 
 
     CONSTRUCTOR Room(roomName : String)
@@ -1738,13 +1787,11 @@ CLASS Room
         CREATE empty devices list
 
 
-
     METHODS
 
         addDevice(device : Device)
 
             ADD device TO devices
-
 
 
         displayDevices()
@@ -1776,38 +1823,17 @@ SET storage1 = NEW StorageUnit(50, 100)
 
 DECLARE camera1 : SmartCamera
 
-SET camera1 = NEW SmartCamera(
-    "Security Camera",
-    "Living Room",
-    TRUE,
-    FALSE,
-    storage1
-)
-
-
+SET camera1 = NEW SmartCamera("Security Camera","Living Room",TRUE,FALSE,storage1)
 
 DECLARE light1 : SmartLight
 
-SET light1 = NEW SmartLight(
-    "Ceiling Light",
-    "Bedroom",
-    TRUE,
-    80
-)
+SET light1 = NEW SmartLight("Ceiling Light","Bedroom",TRUE,80)
 
 
 
 DECLARE thermostat1 : SmartThermostat
 
-SET thermostat1 = NEW SmartThermostat(
-    "Home Thermostat",
-    "Hall",
-    TRUE,
-    22.0,
-    20.0,
-    5
-)
-
+SET thermostat1 = NEW SmartThermostat("Home Thermostat","Hall",TRUE,22.0,20.0,5)
 
 
 DECLARE room1 : Room
@@ -1822,11 +1848,7 @@ CALL room1.addDevice(light1)
 
 CALL room1.addDevice(thermostat1)
 
-
-
 CALL room1.displayDevices()
-
-
 
 END PROGRAM
 
