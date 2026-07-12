@@ -30,8 +30,7 @@ CLASS VehicleClaim INHERITS Claim
         repairEstimate : Double
         excess : Double
 
-    CONSTRUCTOR VehicleClaim(claimNumber : String, dateFiled : String, status : String,
-                             repairEstimate : Double, excess : Double)
+    CONSTRUCTOR VehicleClaim(claimNumber : String, dateFiled : String, status : String, repairEstimate : Double, excess : Double)
 
         CALL SUPER(claimNumber, dateFiled, status)
 
@@ -51,8 +50,7 @@ CLASS MedicalClaim INHERITS Claim
         treatmentCost : Double
         medicalCoverageLimit : Double
 
-    CONSTRUCTOR MedicalClaim(claimNumber : String, dateFiled : String, status : String,
-                             treatmentCost : Double, medicalCoverageLimit : Double)
+    CONSTRUCTOR MedicalClaim(claimNumber : String, dateFiled : String, status : String, treatmentCost : Double, medicalCoverageLimit : Double)
 
         CALL SUPER(claimNumber, dateFiled, status)
 
@@ -80,8 +78,7 @@ CLASS PropertyClaim INHERITS Claim
         damageValue : Double
         maintenanceReduction : Double
 
-    CONSTRUCTOR PropertyClaim(claimNumber : String, dateFiled : String, status : String,
-                              damageValue : Double, maintenanceReduction : Double)
+    CONSTRUCTOR PropertyClaim(claimNumber : String, dateFiled : String, status : String, damageValue : Double, maintenanceReduction : Double)
 
         CALL SUPER(claimNumber, dateFiled, status)
 
@@ -98,7 +95,7 @@ END CLASS
 CLASS DocumentationFolder
 
     ATTRIBUTES
-        documents : List<String>
+        documents : List(String)
 
     CONSTRUCTOR DocumentationFolder()
 
@@ -111,7 +108,7 @@ CLASS Policy
 
     ATTRIBUTES
         policyNumber : String
-        claims : List<Claim>
+        claims : List(Claim)
 
     CONSTRUCTOR Policy(policyNumber : String)
 
@@ -188,3 +185,222 @@ PRINT property.calculatePayout()
 CALL policy.processClaims()
 
 END PROGRAM
+
+
+
+Task 309: University Library Loans (Medium)
+
+
+CLASS LoanItem
+
+    ATTRIBUTES
+        title : String
+        barcode : String
+        loanDuration : Integer
+        conditionReport : ConditionReport
+
+
+    CONSTRUCTOR LoanItem(title : String, barcode : String, loanDuration : Integer)
+
+        SET this.title = title
+        SET this.barcode = barcode
+        SET this.loanDuration = loanDuration
+
+        SET conditionReport = NEW ConditionReport()
+
+
+    METHODS
+
+        calculateLateFee(daysOverdue : Integer) : Double
+
+            RETURN 0
+
+
+        renewLoan() : Boolean
+
+            RETURN TRUE
+
+END CLASS
+
+
+
+CLASS StandardBook INHERITS LoanItem
+
+    ATTRIBUTES
+        dailyLateFee : Double
+
+
+    CONSTRUCTOR StandardBook(title : String, barcode : String, loanDuration : Integer)
+
+        CALL SUPER(title, barcode, loanDuration)
+
+        SET dailyLateFee = 0.50
+
+
+    OVERRIDE METHOD calculateLateFee(daysOverdue : Integer) : Double
+
+        RETURN daysOverdue * dailyLateFee
+
+END CLASS
+
+
+
+CLASS ReferenceTextbook INHERITS LoanItem
+
+    ATTRIBUTES
+        dailyLateFee : Double
+
+
+    CONSTRUCTOR ReferenceTextbook(title : String, barcode : String, loanDuration : Integer)
+
+        CALL SUPER(title, barcode, loanDuration)
+
+        SET dailyLateFee = 2.00
+
+
+    OVERRIDE METHOD calculateLateFee(daysOverdue : Integer) : Double
+
+        RETURN daysOverdue * dailyLateFee
+
+
+    OVERRIDE METHOD renewLoan() : Boolean
+
+        RETURN FALSE
+
+END CLASS
+
+
+
+CLASS JournalIssue INHERITS ReferenceTextbook
+
+
+    CONSTRUCTOR JournalIssue(title : String, barcode : String, loanDuration : Integer)
+
+        CALL SUPER(title, barcode, loanDuration)
+
+
+    OVERRIDE METHOD renewLoan() : Boolean
+
+        RETURN FALSE
+
+
+    METHOD canRenewAfterOverdue() : Boolean
+
+        RETURN FALSE
+
+END CLASS
+
+
+
+CLASS ConditionReport
+
+    ATTRIBUTES
+        damageNotes : String
+
+
+    CONSTRUCTOR ConditionReport()
+
+        SET damageNotes = "No damage"
+
+
+    METHODS
+
+        addDamageNote(note : String)
+
+            SET damageNotes = note
+
+END CLASS
+
+
+
+CLASS StudentAccount
+
+    ATTRIBUTES
+        studentName : String
+        loanItems : List<LoanItem>
+
+
+    CONSTRUCTOR StudentAccount(studentName : String)
+
+        SET this.studentName = studentName
+
+        CREATE empty loanItems list
+
+
+    METHODS
+
+
+        addLoanItem(item : LoanItem)
+
+            ADD item TO loanItems
+
+
+
+        calculateAllLateFees(daysOverdue : Integer)
+
+            SET i = 0
+
+            WHILE i < size of loanItems
+
+                PRINT loanItems[i].title
+
+                PRINT loanItems[i].calculateLateFee(daysOverdue)
+
+                SET i = i + 1
+
+            END WHILE
+
+
+END CLASS
+
+
+
+START PROGRAM
+
+
+DECLARE account : StudentAccount
+
+SET account = NEW StudentAccount("Mohammed")
+
+
+
+DECLARE book : StandardBook
+
+SET book = NEW StandardBook("Java Programming", "B001", 14)
+
+
+
+DECLARE textbook : ReferenceTextbook
+
+SET textbook = NEW ReferenceTextbook("Database Systems", "R001", 1)
+
+
+
+DECLARE journal : JournalIssue
+
+SET journal = NEW JournalIssue("Computer Science Journal", "J001", 1)
+
+
+
+CALL account.addLoanItem(book)
+
+CALL account.addLoanItem(textbook)
+
+CALL account.addLoanItem(journal)
+
+
+
+PRINT "Late Fees After 5 Days:"
+
+
+CALL account.calculateAllLateFees(5)
+
+
+
+PRINT "Can Journal Renew?"
+
+PRINT journal.canRenewAfterOverdue()
+
+
+END PROGRAM 
+
