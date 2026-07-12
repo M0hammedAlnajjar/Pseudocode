@@ -379,11 +379,14 @@ CALL log1.displayWorkouts()
 
 
 END PROGRAM
-Task 295: Zoo Animal Enclosures
 
 
 
-CLASS Animal
+Task 305: Zoo Animal Enclosures
+
+
+
+CLASS Animal (ABSTRACT)
 
     ATTRIBUTES
         name : String
@@ -391,22 +394,26 @@ CLASS Animal
         dietType : String
 
 
-    CONSTRUCTOR Animal(name : String,age : Integer,dietType : String)
+    CONSTRUCTOR Animal(name : String, age : Integer, dietType : String)
+
         SET this.name = name
+
         SET this.age = age
+
         SET this.dietType = dietType
 
 
-    METHODS
 
-        makeSound() : String
+    METHOD getName() : String
 
-            RETURN "Animal Sound"
+        RETURN name
 
 
-        describeMovement() : String
 
-            RETURN "Animal Movement"
+    ABSTRACT METHOD makeSound() : String
+
+    ABSTRACT METHOD describeMovement() : String
+
 
 END CLASS
 
@@ -419,12 +426,14 @@ CLASS Bird INHERITS Animal
         laysEggs : Boolean
 
 
-    CONSTRUCTOR Bird(name : String,age : Integer,dietType : String,canFly : Boolean,laysEggs : Boolean)
+    CONSTRUCTOR Bird(name : String, age : Integer, dietType : String, canFly : Boolean, laysEggs : Boolean)
 
         CALL SUPER(name, age, dietType)
 
         SET this.canFly = canFly
+
         SET this.laysEggs = laysEggs
+
 
 
     OVERRIDE METHOD makeSound() : String
@@ -432,9 +441,11 @@ CLASS Bird INHERITS Animal
         RETURN "Chirp"
 
 
+
     OVERRIDE METHOD describeMovement() : String
 
         RETURN "Flies"
+
 
 END CLASS
 
@@ -447,11 +458,14 @@ CLASS Fish INHERITS Animal
         hasGills : Boolean
 
 
-    CONSTRUCTOR Fish(name : String,age : Integer,dietType : String,swims : Boolean,hasGills : Boolean)
+    CONSTRUCTOR Fish(name : String, age : Integer, dietType : String, swims : Boolean, hasGills : Boolean)
 
         CALL SUPER(name, age, dietType)
+
         SET this.swims = swims
+
         SET this.hasGills = hasGills
+
 
 
     OVERRIDE METHOD makeSound() : String
@@ -459,9 +473,11 @@ CLASS Fish INHERITS Animal
         RETURN "Blub"
 
 
+
     OVERRIDE METHOD describeMovement() : String
 
         RETURN "Swims"
+
 
 END CLASS
 
@@ -474,11 +490,14 @@ CLASS Mammal INHERITS Animal
         givesBirth : Boolean
 
 
-    CONSTRUCTOR Mammal(name : String,age : Integer,dietType : String,hasFur : Boolean,givesBirth : Boolean)
+    CONSTRUCTOR Mammal(name : String, age : Integer, dietType : String, hasFur : Boolean, givesBirth : Boolean)
 
         CALL SUPER(name, age, dietType)
+
         SET this.hasFur = hasFur
+
         SET this.givesBirth = givesBirth
+
 
 
     OVERRIDE METHOD makeSound() : String
@@ -486,9 +505,11 @@ CLASS Mammal INHERITS Animal
         RETURN "Roar"
 
 
+
     OVERRIDE METHOD describeMovement() : String
 
         RETURN "Walks"
+
 
 END CLASS
 
@@ -498,7 +519,7 @@ CLASS Enclosure
 
     ATTRIBUTES
         temperature : Double
-        animals : List(Animal)
+        animals : List<Animal>
 
 
     CONSTRUCTOR Enclosure(temperature : Double)
@@ -508,28 +529,26 @@ CLASS Enclosure
         CREATE empty animals list
 
 
-    METHODS
 
-        addAnimal(animal : Animal)
+    METHOD addAnimal(animal : Animal)
 
-            ADD animal TO animals
+        ADD animal TO animals
 
 
-        displayAnimals()
 
-            SET i = 0
+    METHOD displayAnimals()
 
-            WHILE i < size of animals
+        FOR EACH animal IN animals
 
-                PRINT animals[i].name
+            PRINT "Animal Name: " + animal.getName()
 
-                PRINT animals[i].makeSound()
+            PRINT "Sound: " + animal.makeSound()
 
-                PRINT animals[i].describeMovement()
+            PRINT "Movement: " + animal.describeMovement()
 
-                SET i = i + 1
 
-            END WHILE
+        END FOR
+
 
 END CLASS
 
@@ -546,17 +565,21 @@ SET enclosure1 = NEW Enclosure(25.0)
 
 DECLARE bird1 : Bird
 
-SET bird1 = NEW Bird("Parrot",3,"Seeds", TRUE,TRUE)
+SET bird1 = NEW Bird("Parrot", 3, "Seeds", TRUE, TRUE)
+
+
 
 DECLARE fish1 : Fish
 
-SET fish1 = NEW Fish("Goldfish", 1,"Flakes",TRUE,TRUE)
+SET fish1 = NEW Fish("Goldfish", 1, "Flakes", TRUE, TRUE)
 
 
 
 DECLARE mammal1 : Mammal
 
-SET mammal1 = NEW Mammal("Lion", 5,"Meat",TRUE,TRUE)
+SET mammal1 = NEW Mammal("Lion", 5, "Meat", TRUE, TRUE)
+
+
 
 CALL enclosure1.addAnimal(bird1)
 
@@ -566,14 +589,10 @@ CALL enclosure1.addAnimal(mammal1)
 
 
 
-CALL enclosure1.displayAnimals(
+CALL enclosure1.displayAnimals()
 
 
-END PROGRAM
-
-
-
-Task 306: Utility Billing System
+END PROGRAMTask 306: Utility Billing System
 
 
 CLASS Bill
