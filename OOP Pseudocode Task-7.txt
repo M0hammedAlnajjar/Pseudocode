@@ -921,8 +921,6 @@ END PROGRAM
 
 
 
-
-
 Task 312: Data Center Server Management (Medium)
 
 
@@ -935,9 +933,7 @@ CLASS Server (ABSTRACT)
         hardware : HardwareSpecification
 
 
-    CONSTRUCTOR Server(serialNumber : String,
-                       uptime : Double,
-                       hardware : HardwareSpecification)
+    CONSTRUCTOR Server(serialNumber : String,uptime : Double,hardware : HardwareSpecification)
 
         SET this.serialNumber = serialNumber
 
@@ -967,11 +963,7 @@ CLASS WebServer INHERITS Server
         maxConnections : Integer
 
 
-    CONSTRUCTOR WebServer(serialNumber : String,
-                          uptime : Double,
-                          hardware : HardwareSpecification,
-                          activeConnections : Integer,
-                          maxConnections : Integer)
+    CONSTRUCTOR WebServer(serialNumber : String,uptime : Double,hardware : HardwareSpecification,activeConnections : Integer,maxConnections : Integer)
 
         CALL SUPER(serialNumber, uptime, hardware)
 
@@ -997,11 +989,7 @@ CLASS DatabaseServer INHERITS Server
         maxQueriesPerSecond : Integer
 
 
-    CONSTRUCTOR DatabaseServer(serialNumber : String,
-                               uptime : Double,
-                               hardware : HardwareSpecification,
-                               currentQueries : Integer,
-                               maxQueriesPerSecond : Integer)
+    CONSTRUCTOR DatabaseServer(serialNumber : String,uptime : Double,hardware : HardwareSpecification,currentQueries : Integer,maxQueriesPerSecond : Integer)
 
         CALL SUPER(serialNumber, uptime, hardware)
 
@@ -1044,18 +1032,9 @@ CLASS CacheServer INHERITS DatabaseServer
         cacheHitRatio : Double
 
 
-    CONSTRUCTOR CacheServer(serialNumber : String,
-                            uptime : Double,
-                            hardware : HardwareSpecification,
-                            currentQueries : Integer,
-                            maxQueriesPerSecond : Integer,
-                            cacheHitRatio : Double)
+    CONSTRUCTOR CacheServer(serialNumber : String,uptime : Double,hardware : HardwareSpecification,currentQueries : Integer,maxQueriesPerSecond : Integer,cacheHitRatio : Double)
 
-        CALL SUPER(serialNumber,
-                   uptime,
-                   hardware,
-                   currentQueries,
-                   maxQueriesPerSecond)
+        CALL SUPER(serialNumber,uptime,hardware,currentQueries,maxQueriesPerSecond)
 
 
         SET this.cacheHitRatio = cacheHitRatio
@@ -1088,9 +1067,7 @@ CLASS HardwareSpecification
         storage : Double
 
 
-    CONSTRUCTOR HardwareSpecification(cpu : String,
-                                      ram : Double,
-                                      storage : Double)
+    CONSTRUCTOR HardwareSpecification(cpu : String,ram : Double,storage : Double)
 
         SET this.cpu = cpu
 
@@ -1142,48 +1119,24 @@ START PROGRAM
 
 DECLARE hardware1 : HardwareSpecification
 
-SET hardware1 = NEW HardwareSpecification(
-    "Intel Xeon",
-    64,
-    2000
-)
+SET hardware1 = NEW HardwareSpecification("Intel Xeon",64, 2000)
 
 
 
 DECLARE webServer1 : WebServer
 
-SET webServer1 = NEW WebServer(
-    "WEB001",
-    500,
-    hardware1,
-    300,
-    1000
-)
-
+SET webServer1 = NEW WebServer( "WEB001",500,hardware1,300,1000)
 
 
 DECLARE databaseServer1 : DatabaseServer
 
-SET databaseServer1 = NEW DatabaseServer(
-    "DB001",
-    800,
-    hardware1,
-    700,
-    1000
-)
+SET databaseServer1 = NEW DatabaseServer("DB001", 800,hardware1,700,1000)
 
 
 
 DECLARE cacheServer1 : CacheServer
 
-SET cacheServer1 = NEW CacheServer(
-    "CACHE001",
-    900,
-    hardware1,
-    600,
-    1000,
-    0.80
-)
+SET cacheServer1 = NEW CacheServer( "CACHE001",900,hardware1,600,1000,0.80)
 
 
 
