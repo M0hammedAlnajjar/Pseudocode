@@ -192,24 +192,35 @@ Task 304: Fitness App Workouts
 
 
 
-CLASS Workout
+CLASS Workout (ABSTRACT)
 
     ATTRIBUTES
         date : String
         duration : Double
 
 
-    CONSTRUCTOR Workout(date : String,duration : Double)
+    CONSTRUCTOR Workout(date : String, duration : Double)
 
         SET this.date = date
+
         SET this.duration = duration
 
 
-    METHODS
 
-        calculateCalories() : Double
+    METHOD getDate() : String
 
-            RETURN 0.0
+        RETURN date
+
+
+
+    METHOD getDuration() : Double
+
+        RETURN duration
+
+
+
+    ABSTRACT METHOD calculateCalories() : Double
+
 
 END CLASS
 
@@ -222,17 +233,20 @@ CLASS RunningWorkout INHERITS Workout
         pace : Double
 
 
-    CONSTRUCTOR RunningWorkout(date : String,duration : Double,distance : Double,pace : Double)
+    CONSTRUCTOR RunningWorkout(date : String, duration : Double, distance : Double, pace : Double)
 
         CALL SUPER(date, duration)
 
         SET this.distance = distance
+
         SET this.pace = pace
+
 
 
     OVERRIDE METHOD calculateCalories() : Double
 
         RETURN distance * pace * 10
+
 
 END CLASS
 
@@ -245,16 +259,20 @@ CLASS CyclingWorkout INHERITS Workout
         resistanceLevel : Integer
 
 
-    CONSTRUCTOR CyclingWorkout(date : String,duration : Double,distance : Double,resistanceLevel : Integer)
+    CONSTRUCTOR CyclingWorkout(date : String, duration : Double, distance : Double, resistanceLevel : Integer)
 
         CALL SUPER(date, duration)
+
         SET this.distance = distance
+
         SET this.resistanceLevel = resistanceLevel
+
 
 
     OVERRIDE METHOD calculateCalories() : Double
 
         RETURN distance * resistanceLevel * 8
+
 
 END CLASS
 
@@ -267,15 +285,20 @@ CLASS WeightTrainingWorkout INHERITS Workout
         reps : Integer
 
 
-    CONSTRUCTOR WeightTrainingWorkout(date : String,duration : Double,sets : Integer,reps : Integer)
+    CONSTRUCTOR WeightTrainingWorkout(date : String, duration : Double, sets : Integer, reps : Integer)
 
         CALL SUPER(date, duration)
+
         SET this.sets = sets
+
         SET this.reps = reps
 
 
+
     OVERRIDE METHOD calculateCalories() : Double
+
         RETURN sets * reps * 2
+
 
 END CLASS
 
@@ -284,7 +307,7 @@ END CLASS
 CLASS FitnessLog
 
     ATTRIBUTES
-        workouts : List(Workout)
+        workouts : List<Workout>
 
 
     CONSTRUCTOR FitnessLog()
@@ -292,26 +315,26 @@ CLASS FitnessLog
         CREATE empty workouts list
 
 
-    METHODS
 
-        addWorkout(workout : Workout)
+    METHOD addWorkout(workout : Workout)
 
-            ADD workout TO workouts
+        ADD workout TO workouts
 
 
-        displayWorkouts()
 
-            SET i = 0
+    METHOD displayWorkouts()
 
-            WHILE i < size of workouts
+        FOR EACH workout IN workouts
 
-                PRINT workouts[i].date
+            PRINT "Date: " + workout.getDate()
 
-                PRINT workouts[i].calculateCalories()
+            PRINT "Duration: " + workout.getDuration()
 
-                SET i = i + 1
+            PRINT "Calories: " + workout.calculateCalories()
 
-            END WHILE
+
+        END FOR
+
 
 END CLASS
 
@@ -328,16 +351,20 @@ SET log1 = NEW FitnessLog()
 
 DECLARE run1 : RunningWorkout
 
-SET run1 = NEW RunningWorkout("2026-07-08",45,8,6)
+SET run1 = NEW RunningWorkout("2026-07-08", 45, 8, 6)
+
+
 
 DECLARE cycle1 : CyclingWorkout
 
-SET cycle1 = NEW CyclingWorkout("2026-07-09",60,20, 4)
+SET cycle1 = NEW CyclingWorkout("2026-07-09", 60, 20, 4)
+
 
 
 DECLARE weight1 : WeightTrainingWorkout
 
-SET weight1 = NEW WeightTrainingWorkout("2026-07-10", 50, 5,12)
+SET weight1 = NEW WeightTrainingWorkout("2026-07-10", 50, 5, 12)
+
 
 
 CALL log1.addWorkout(run1)
@@ -347,11 +374,11 @@ CALL log1.addWorkout(cycle1)
 CALL log1.addWorkout(weight1)
 
 
+
 CALL log1.displayWorkouts()
 
 
 END PROGRAM
-
 Task 295: Zoo Animal Enclosures
 
 
