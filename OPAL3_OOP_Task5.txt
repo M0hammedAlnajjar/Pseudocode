@@ -1904,27 +1904,26 @@ END PROGRAM
 
 Task 301: E-book Reader App
 
-CLASS Publication
+CLASS Publication (ABSTRACT)
 
     ATTRIBUTES
         title : String
         author : String
-        totalPages : Integer
         coverImage : CoverImage
 
 
-    CONSTRUCTOR Publication(title : String,author : String,totalPages : Integer,coverImage : CoverImage)
+    CONSTRUCTOR Publication(title : String, author : String, coverImage : CoverImage)
 
         SET this.title = title
+
         SET this.author = author
-        SET this.totalPages = totalPages
+
         SET this.coverImage = coverImage
 
 
-    METHODS
 
-        getProgress() : Double
-            RETURN 0.0
+    ABSTRACT METHOD getProgress() : Double
+
 
 END CLASS
 
@@ -1933,23 +1932,38 @@ END CLASS
 CLASS Novel INHERITS Publication
 
     ATTRIBUTES
+        totalPages : Integer
         pagesRead : Integer
 
 
-    CONSTRUCTOR Novel(title : String,
-                      author : String,
-                      totalPages : Integer,
-                      coverImage : CoverImage,
-                      pagesRead : Integer)
+    CONSTRUCTOR Novel(title : String, author : String, totalPages : Integer, coverImage : CoverImage, pagesRead : Integer)
 
-        CALL SUPER(title, author, totalPages, coverImage)
+        CALL SUPER(title, author, coverImage)
+
+        SET this.totalPages = totalPages
 
         SET this.pagesRead = pagesRead
+
+
+
+    METHOD setCurrentPage(page : Integer)
+
+        IF page >= 0 AND page <= totalPages THEN
+
+            SET pagesRead = page
+
+        ELSE
+
+            PRINT "Invalid page number"
+
+        END IF
+
 
 
     OVERRIDE METHOD getProgress() : Double
 
         RETURN (pagesRead / totalPages) * 100
+
 
 END CLASS
 
@@ -1962,18 +1976,30 @@ CLASS Magazine INHERITS Publication
         openedArticles : Integer
 
 
-    CONSTRUCTOR Magazine(title : String,author : String,totalPages : Integer, coverImage : CoverImage,
-    totalArticles : Integer,openedArticles : Integer)
+    CONSTRUCTOR Magazine(title : String, author : String, totalArticles : Integer, coverImage : CoverImage, totalArticles : Integer, openedArticles : Integer)
 
-        CALL SUPER(title, author, totalPages, coverImage)
+        CALL SUPER(title, author, coverImage)
 
         SET this.totalArticles = totalArticles
+
         SET this.openedArticles = openedArticles
+
+
+
+    METHOD openArticle()
+
+        IF openedArticles < totalArticles THEN
+
+            SET openedArticles = openedArticles + 1
+
+        END IF
+
 
 
     OVERRIDE METHOD getProgress() : Double
 
         RETURN (openedArticles / totalArticles) * 100
+
 
 END CLASS
 
@@ -1986,18 +2012,34 @@ CLASS Audiobook INHERITS Publication
         listenedTime : Double
 
 
-    CONSTRUCTOR Audiobook(title : String,author : String,totalPages : Integer,coverImage : CoverImage,
-    totalListeningTime : Double,listenedTime : Double)
+    CONSTRUCTOR Audiobook(title : String, author : String, totalListeningTime : Double, coverImage : CoverImage, listenedTime : Double)
 
-        CALL SUPER(title, author, totalPages, coverImage)
+        CALL SUPER(title, author, coverImage)
 
         SET this.totalListeningTime = totalListeningTime
+
         SET this.listenedTime = listenedTime
+
+
+
+    METHOD addListeningTime(time : Double)
+
+        IF listenedTime + time <= totalListeningTime THEN
+
+            SET listenedTime = listenedTime + time
+
+        ELSE
+
+            PRINT "Listening time exceeds book length"
+
+        END IF
+
 
 
     OVERRIDE METHOD getProgress() : Double
 
         RETURN (listenedTime / totalListeningTime) * 100
+
 
 END CLASS
 
@@ -2011,11 +2053,14 @@ CLASS CoverImage
         height : Integer
 
 
-    CONSTRUCTOR CoverImage(filePath : String, width : Integer,height : Integer)
+    CONSTRUCTOR CoverImage(filePath : String, width : Integer, height : Integer)
 
         SET this.filePath = filePath
+
         SET this.width = width
+
         SET this.height = height
+
 
 END CLASS
 
@@ -2032,26 +2077,30 @@ CLASS Library
         CREATE empty publications list
 
 
-    METHODS
 
-        addPublication(publication : Publication)
+    METHOD addPublication(publication : Publication)
 
-            ADD publication TO publications
+        ADD publication TO publications
 
 
-        displayProgress()
 
-            SET i = 0
+    METHOD displayProgress()
 
-            WHILE i < size of publications
+        SET i = 0
 
-                PRINT publications[i].title
 
-                PRINT publications[i].getProgress()
+        WHILE i < size of publications
 
-                SET i = i + 1
+            PRINT "Title: " + publications[i].title
 
-            END WHILE
+            PRINT "Progress: " + publications[i].getProgress() + "%"
+
+
+            SET i = i + 1
+
+
+        END WHILE
+
 
 END CLASS
 
@@ -2062,23 +2111,25 @@ START PROGRAM
 
 DECLARE cover1 : CoverImage
 
-SET cover1 = NEW CoverImage("cover.jpg", 500,700)
+SET cover1 = NEW CoverImage("cover.jpg", 500, 700)
+
+
 
 DECLARE novel1 : Novel
 
-SET novel1 = NEW Novel("The Story","Ahmed",300, cover1,150)
+SET novel1 = NEW Novel("The Story", "Ahmed", 300, cover1, 150)
 
 
 
 DECLARE magazine1 : Magazine
 
-SET magazine1 = NEW Magazine("Tech Magazine","Sara",100,cover1,10,5)
+SET magazine1 = NEW Magazine("Tech Magazine", "Sara", 10, cover1, 5)
 
 
 
 DECLARE audiobook1 : Audiobook
 
-SET audiobook1 = NEW Audiobook("Learning Book", "Ali", 200,cover1,10,4)
+SET audiobook1 = NEW Audiobook("Learning Book", "Ali", 10, cover1, 4)
 
 
 
@@ -2086,18 +2137,20 @@ DECLARE library1 : Library
 
 SET library1 = NEW Library()
 
+
+
 CALL library1.addPublication(novel1)
 
 CALL library1.addPublication(magazine1)
 
 CALL library1.addPublication(audiobook1)
 
+
+
 CALL library1.displayProgress()
 
 
 END PROGRAM
-
-
 
 Task 302: Smart Home Devices
 
