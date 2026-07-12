@@ -1121,31 +1121,38 @@ CALL user1.displaySubscription()
 
 
 END PROGRAM
-Task 298: Delivery Vehicles Fleet
 
 
-CLASS Vehicle
+
+Task 298: CLASS Vehicle (ABSTRACT)
 
     ATTRIBUTES
         licensePlate : String
         fuelLevel : Double
         engine : Engine
 
-    CONSTRUCTOR Vehicle(licensePlate : String,fuelLevel : Double,engine : Engine)
+
+    CONSTRUCTOR Vehicle(licensePlate : String, fuelLevel : Double, engine : Engine)
 
         SET this.licensePlate = licensePlate
+
         SET this.fuelLevel = fuelLevel
+
         SET this.engine = engine
 
 
-    METHODS
 
-        calculateDeliveryTime(distance : Double) : Double
+    ABSTRACT METHOD calculateDeliveryTime(distance : Double) : Double
 
-            RETURN distance / 50
+
+
+    METHOD calculateFuelConsumption(distance : Double) : Double
+
+        RETURN distance / engine.fuelEfficiency
 
 
 END CLASS
+
 
 
 CLASS Van INHERITS Vehicle
@@ -1154,16 +1161,18 @@ CLASS Van INHERITS Vehicle
         cargoCapacity : Double
 
 
-    CONSTRUCTOR Van(licensePlate : String,fuelLevel : Double,engine : Engine, cargoCapacity : Double)
+    CONSTRUCTOR Van(licensePlate : String, fuelLevel : Double, engine : Engine, cargoCapacity : Double)
 
         CALL SUPER(licensePlate, fuelLevel, engine)
 
         SET this.cargoCapacity = cargoCapacity
 
 
+
     OVERRIDE METHOD calculateDeliveryTime(distance : Double) : Double
 
         RETURN distance / 50
+
 
 END CLASS
 
@@ -1175,16 +1184,32 @@ CLASS Motorbike INHERITS Vehicle
         packageLimit : Integer
 
 
-    CONSTRUCTOR Motorbike(licensePlate : String,fuelLevel : Double,engine : Engine,packageLimit : Integer)
+    CONSTRUCTOR Motorbike(licensePlate : String, fuelLevel : Double, engine : Engine, packageLimit : Integer)
 
         CALL SUPER(licensePlate, fuelLevel, engine)
 
         SET this.packageLimit = packageLimit
 
 
+
     OVERRIDE METHOD calculateDeliveryTime(distance : Double) : Double
 
         RETURN distance / 80
+
+
+
+    METHOD validatePackage(package : Package) : Boolean
+
+        IF package.weight <= packageLimit THEN
+
+            RETURN TRUE
+
+        ELSE
+
+            RETURN FALSE
+
+        END IF
+
 
 END CLASS
 
@@ -1192,24 +1217,22 @@ END CLASS
 
 CLASS Truck INHERITS Vehicle
 
-
     ATTRIBUTES
         heavyLoadCapacity : Double
 
 
-    CONSTRUCTOR Truck(licensePlate : String,
-                      fuelLevel : Double,
-                      engine : Engine,
-                      heavyLoadCapacity : Double)
+    CONSTRUCTOR Truck(licensePlate : String, fuelLevel : Double, engine : Engine, heavyLoadCapacity : Double)
 
         CALL SUPER(licensePlate, fuelLevel, engine)
 
         SET this.heavyLoadCapacity = heavyLoadCapacity
 
 
+
     OVERRIDE METHOD calculateDeliveryTime(distance : Double) : Double
 
         RETURN distance / 40
+
 
 END CLASS
 
@@ -1222,11 +1245,30 @@ CLASS Engine
         fuelEfficiency : Double
 
 
-    CONSTRUCTOR Engine(horsepower : Integer,
-                       fuelEfficiency : Double)
+    CONSTRUCTOR Engine(horsepower : Integer, fuelEfficiency : Double)
 
         SET this.horsepower = horsepower
+
         SET this.fuelEfficiency = fuelEfficiency
+
+
+END CLASS
+
+
+
+CLASS Package
+
+    ATTRIBUTES
+        weight : Double
+        dimensions : String
+
+
+    CONSTRUCTOR Package(weight : Double, dimensions : String)
+
+        SET this.weight = weight
+
+        SET this.dimensions = dimensions
+
 
 END CLASS
 
@@ -1236,12 +1278,15 @@ CLASS Stop
 
     ATTRIBUTES
         address : String
-        package : String
+        package : Package
 
 
-    CONSTRUCTOR Stop(address : String, package : String)
+    CONSTRUCTOR Stop(address : String, package : Package)
+
         SET this.address = address
+
         SET this.package = package
+
 
 END CLASS
 
@@ -1258,11 +1303,11 @@ CLASS Route
         CREATE empty stops list
 
 
-    METHODS
 
-        addStop(stop : Stop)
+    METHOD addStop(stop : Stop)
 
-            ADD stop TO stops
+        ADD stop TO stops
+
 
 END CLASS
 
@@ -1276,9 +1321,11 @@ DECLARE engine1 : Engine
 SET engine1 = NEW Engine(300, 15.5)
 
 
+
 DECLARE van1 : Van
 
 SET van1 = NEW Van("ABC123", 80, engine1, 1000)
+
 
 
 DECLARE route1 : Route
@@ -1286,20 +1333,39 @@ DECLARE route1 : Route
 SET route1 = NEW Route()
 
 
+
+DECLARE package1 : Package
+
+SET package1 = NEW Package(5, "30x20x10 cm")
+
+
+
 DECLARE stop1 : Stop
 
-SET stop1 = NEW Stop("Main Street", "Package A")
+SET stop1 = NEW Stop("Main Street", package1)
+
 
 
 CALL route1.addStop(stop1)
 
+
+
 DECLARE deliveryTime : Double
+
 SET deliveryTime = van1.calculateDeliveryTime(100)
-PRINT deliveryTime
+
+PRINT "Delivery Time: " + deliveryTime
+
+
+
+DECLARE fuelUsed : Double
+
+SET fuelUsed = van1.calculateFuelConsumption(100)
+
+PRINT "Fuel Used: " + fuelUsed
+
+
 END PROGRAM
-
-
-
 
 
 Task 299: Bank Cards  
