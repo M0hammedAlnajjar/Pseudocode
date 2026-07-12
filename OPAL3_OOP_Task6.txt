@@ -1,22 +1,35 @@
 Task 303: Musical Instruments Store  
 
 
-CLASS Instrument
+CLASS Instrument (ABSTRACT)
 
     ATTRIBUTES
         brand : String
         price : Double
 
-    CONSTRUCTOR Instrument(brand : String,price : Double)
+
+    CONSTRUCTOR Instrument(brand : String, price : Double)
 
         SET this.brand = brand
+
         SET this.price = price
 
-    METHODS
 
-        describePlayStyle() : String
 
-            RETURN "Instrument playing style"
+    METHOD getBrand() : String
+
+        RETURN brand
+
+
+
+    METHOD getPrice() : Double
+
+        RETURN price
+
+
+
+    ABSTRACT METHOD describePlayStyle() : String
+
 
 END CLASS
 
@@ -28,15 +41,18 @@ CLASS Guitar INHERITS Instrument
         numberOfStrings : Integer
 
 
-    CONSTRUCTOR Guitar(brand : String,price : Double,numberOfStrings : Integer)
+    CONSTRUCTOR Guitar(brand : String, price : Double, numberOfStrings : Integer)
 
         CALL SUPER(brand, price)
 
         SET this.numberOfStrings = numberOfStrings
 
+
+
     OVERRIDE METHOD describePlayStyle() : String
 
         RETURN "Strummed or plucked"
+
 
 END CLASS
 
@@ -48,11 +64,13 @@ CLASS DrumKit INHERITS Instrument
         numberOfDrums : Integer
 
 
-    CONSTRUCTOR DrumKit(brand : String,price : Double,numberOfDrums : Integer)
+    CONSTRUCTOR DrumKit(brand : String, price : Double, numberOfDrums : Integer)
 
         CALL SUPER(brand, price)
 
         SET this.numberOfDrums = numberOfDrums
+
+
 
     OVERRIDE METHOD describePlayStyle() : String
 
@@ -69,11 +87,12 @@ CLASS Keyboard INHERITS Instrument
         numberOfKeys : Integer
 
 
-    CONSTRUCTOR Keyboard(brand : String,price : Double,numberOfKeys : Integer)
+    CONSTRUCTOR Keyboard(brand : String, price : Double, numberOfKeys : Integer)
 
         CALL SUPER(brand, price)
 
         SET this.numberOfKeys = numberOfKeys
+
 
 
     OVERRIDE METHOD describePlayStyle() : String
@@ -96,32 +115,35 @@ CLASS Store
         CREATE empty instruments list
 
 
-    METHODS
+
+    METHOD addInstrument(instrument : Instrument)
+
+        ADD instrument TO instruments
 
 
-        addInstrument(instrument : Instrument)
 
-            ADD instrument TO instruments
+    METHOD displayInstruments()
+
+        SET i = 0
 
 
-        displayInstruments()
+        WHILE i < size of instruments
 
-            SET i = 0
+            PRINT "Brand: " + instruments[i].getBrand()
 
-            WHILE i < size of instruments
+            PRINT "Price: " + instruments[i].getPrice()
 
-                PRINT instruments[i].brand
+            PRINT "Play Style: " + instruments[i].describePlayStyle()
 
-                PRINT instruments[i].price
 
-                PRINT instruments[i].describePlayStyle()
+            SET i = i + 1
 
-                SET i = i + 1
 
-            END WHILE
+        END WHILE
 
 
 END CLASS
+
 
 
 START PROGRAM
@@ -135,17 +157,20 @@ SET store1 = NEW Store()
 
 DECLARE guitar1 : Guitar
 
-SET guitar1 = NEW Guitar("Yamaha",500.0, 6)
+SET guitar1 = NEW Guitar("Yamaha", 500.0, 6)
+
 
 
 DECLARE drum1 : DrumKit
 
-SET drum1 = NEW DrumKit("Pearl",800.0,5)
+SET drum1 = NEW DrumKit("Pearl", 800.0, 5)
+
 
 
 DECLARE keyboard1 : Keyboard
 
-SET keyboard1 = NEW Keyboard("Casio",300.0,61)
+SET keyboard1 = NEW Keyboard("Casio", 300.0, 61)
+
 
 
 CALL store1.addInstrument(guitar1)
@@ -155,7 +180,9 @@ CALL store1.addInstrument(drum1)
 CALL store1.addInstrument(keyboard1)
 
 
+
 CALL store1.displayInstruments()
+
 
 END PROGRAM
 
