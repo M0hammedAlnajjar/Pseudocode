@@ -834,29 +834,38 @@ END PROGRAM
 
 Task 307: Ride-Sharing Vehicle Tiers  
 
-
-CLASS Ride
+CLASS Ride (ABSTRACT)
 
     ATTRIBUTES
         pickupLocation : String
         dropOffLocation : String
+        distance : Double
         route : Route
 
 
     CONSTRUCTOR Ride(pickupLocation : String,
                      dropOffLocation : String,
+                     distance : Double,
                      route : Route)
 
         SET this.pickupLocation = pickupLocation
+
         SET this.dropOffLocation = dropOffLocation
+
+        SET this.distance = distance
+
         SET this.route = route
 
 
-    METHODS
 
-        calculateFare() : Double
+    METHOD getDistance() : Double
 
-            RETURN 0.0
+        RETURN distance
+
+
+
+    ABSTRACT METHOD calculateFare() : Double
+
 
 END CLASS
 
@@ -865,21 +874,25 @@ END CLASS
 CLASS StandardRide INHERITS Ride
 
     ATTRIBUTES
-        distance : Double
         ratePerKilometer : Double
 
 
-    CONSTRUCTOR StandardRide(pickupLocation : String,dropOffLocation : String,route : Route,distance : Double,ratePerKilometer : Double)
+    CONSTRUCTOR StandardRide(pickupLocation : String,
+                             dropOffLocation : String,
+                             distance : Double,
+                             route : Route,
+                             ratePerKilometer : Double)
 
-        CALL SUPER(pickupLocation, dropOffLocation, route)
+        CALL SUPER(pickupLocation, dropOffLocation, distance, route)
 
-        SET this.distance = distance
         SET this.ratePerKilometer = ratePerKilometer
+
 
 
     OVERRIDE METHOD calculateFare() : Double
 
         RETURN distance * ratePerKilometer
+
 
 END CLASS
 
@@ -888,23 +901,29 @@ END CLASS
 CLASS PremiumRide INHERITS Ride
 
     ATTRIBUTES
-        distance : Double
         ratePerKilometer : Double
         comfortSurcharge : Double
 
 
-    CONSTRUCTOR PremiumRide(pickupLocation : String,dropOffLocation : String,route : Route,distance : Double,ratePerKilometer : Double ,comfortSurcharge : Double)
+    CONSTRUCTOR PremiumRide(pickupLocation : String,
+                            dropOffLocation : String,
+                            distance : Double,
+                            route : Route,
+                            ratePerKilometer : Double,
+                            comfortSurcharge : Double)
 
-        CALL SUPER(pickupLocation, dropOffLocation, route)
+        CALL SUPER(pickupLocation, dropOffLocation, distance, route)
 
-        SET this.distance = distance
         SET this.ratePerKilometer = ratePerKilometer
+
         SET this.comfortSurcharge = comfortSurcharge
+
 
 
     OVERRIDE METHOD calculateFare() : Double
 
         RETURN (distance * ratePerKilometer) + comfortSurcharge
+
 
 END CLASS
 
@@ -916,16 +935,28 @@ CLASS SharedRide INHERITS StandardRide
         numberOfPassengers : Integer
 
 
-    CONSTRUCTOR SharedRide(pickupLocation : String,dropOffLocation : String,route : Route,distance : Double,ratePerKilometer : Double,numberOfPassengers : Integer)
+    CONSTRUCTOR SharedRide(pickupLocation : String,
+                           dropOffLocation : String,
+                           distance : Double,
+                           route : Route,
+                           ratePerKilometer : Double,
+                           numberOfPassengers : Integer)
 
-        CALL SUPER(pickupLocation,dropOffLocation,route,distance,ratePerKilometer)
+        CALL SUPER(pickupLocation,
+                   dropOffLocation,
+                   distance,
+                   route,
+                   ratePerKilometer)
+
 
         SET this.numberOfPassengers = numberOfPassengers
+
 
 
     OVERRIDE METHOD calculateFare() : Double
 
         RETURN (distance * ratePerKilometer) / numberOfPassengers
+
 
 END CLASS
 
@@ -940,6 +971,7 @@ CLASS Waypoint
     CONSTRUCTOR Waypoint(location : String)
 
         SET this.location = location
+
 
 END CLASS
 
@@ -956,11 +988,11 @@ CLASS Route
         CREATE empty waypoints list
 
 
-    METHODS
 
-        addWaypoint(waypoint : Waypoint)
+    METHOD addWaypoint(waypoint : Waypoint)
 
-            ADD waypoint TO waypoints
+        ADD waypoint TO waypoints
+
 
 
 END CLASS
@@ -969,9 +1001,11 @@ END CLASS
 
 START PROGRAM
 
+
 DECLARE route1 : Route
 
 SET route1 = NEW Route()
+
 
 
 DECLARE point1 : Waypoint
@@ -982,17 +1016,51 @@ CALL route1.addWaypoint(point1)
 
 
 
+DECLARE route2 : Route
+
+SET route2 = NEW Route()
+
+
+
+DECLARE point2 : Waypoint
+
+SET point2 = NEW Waypoint("Airport Road")
+
+CALL route2.addWaypoint(point2)
+
+
+
 DECLARE ride1 : StandardRide
 
-SET ride1 = NEW StandardRide("Mall","Airport",route1,15,2.5)
+SET ride1 = NEW StandardRide("Mall",
+                             "Airport",
+                             15,
+                             route1,
+                             2.5)
+
+
 
 DECLARE ride2 : PremiumRide
 
-SET ride2 = NEW PremiumRide("Hotel","Station",route1,20,3.5,10)
+SET ride2 = NEW PremiumRide("Hotel",
+                            "Station",
+                            20,
+                            route2,
+                            3.5,
+                            10)
+
+
 
 DECLARE ride3 : SharedRide
 
-SET ride3 = NEW SharedRide("University","Downtown",route1,18,2.5,3)
+SET ride3 = NEW SharedRide("University",
+                           "Downtown",
+                           18,
+                           route1,
+                           2.5,
+                           3)
+
+
 
 PRINT ride1.calculateFare()
 
