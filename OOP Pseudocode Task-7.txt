@@ -1,6 +1,6 @@
 Task 308: Insurance Claims Processing 
 
-CLASS Claim
+ABSTRACT CLASS Claim
 
     ATTRIBUTES
         claimNumber : String
@@ -15,11 +15,7 @@ CLASS Claim
         SET this.status = status
         SET documentationFolder = NEW DocumentationFolder()
 
-    METHODS
-
-        calculatePayout() : Double
-
-            RETURN 0
+    ABSTRACT METHOD calculatePayout() : Double
 
 END CLASS
 
@@ -39,7 +35,11 @@ CLASS VehicleClaim INHERITS Claim
 
     OVERRIDE METHOD calculatePayout() : Double
 
-        RETURN repairEstimate - excess
+        IF repairEstimate < excess THEN
+            RETURN 0
+        ELSE
+            RETURN repairEstimate - excess
+        END IF
 
 END CLASS
 
@@ -60,13 +60,9 @@ CLASS MedicalClaim INHERITS Claim
     OVERRIDE METHOD calculatePayout() : Double
 
         IF treatmentCost > medicalCoverageLimit THEN
-
             RETURN medicalCoverageLimit
-
         ELSE
-
             RETURN treatmentCost
-
         END IF
 
 END CLASS
@@ -87,7 +83,27 @@ CLASS PropertyClaim INHERITS Claim
 
     OVERRIDE METHOD calculatePayout() : Double
 
-        RETURN damageValue - (damageValue * maintenanceReduction / 100)
+        IF damageValue < 0 THEN
+            RETURN 0
+        ELSE
+            RETURN damageValue - (damageValue * maintenanceReduction / 100)
+        END IF
+
+END CLASS
+
+
+CLASS Document
+
+    ATTRIBUTES
+        documentName : String
+        documentType : String
+        dateUploaded : String
+
+    CONSTRUCTOR Document(documentName : String, documentType : String, dateUploaded : String)
+
+        SET this.documentName = documentName
+        SET this.documentType = documentType
+        SET this.dateUploaded = dateUploaded
 
 END CLASS
 
@@ -95,11 +111,17 @@ END CLASS
 CLASS DocumentationFolder
 
     ATTRIBUTES
-        documents : List(String)
+        documents : List(Document)
 
     CONSTRUCTOR DocumentationFolder()
 
         CREATE empty documents list
+
+    METHOD addDocument(document : Document)
+
+        ADD document TO documents
+
+END METHOD
 
 END CLASS
 
@@ -116,24 +138,24 @@ CLASS Policy
 
         CREATE empty claims list
 
-    METHODS
+    METHOD addClaim(claim : Claim)
 
-        addClaim(claim : Claim)
+        ADD claim TO claims
 
-            ADD claim TO claims
+    METHOD processClaims()
 
-        processClaims()
+        SET i = 0
 
-            SET i = 0
+        WHILE i < size of claims
 
-            WHILE i < size of claims
+            DISPLAY "Claim Number: " + claims[i].claimNumber
+            DISPLAY "Status: " + claims[i].status
+            DISPLAY "Payout: " + claims[i].calculatePayout()
+            DISPLAY "---------------------------"
 
-                PRINT claims[i].claimNumber
-                PRINT claims[i].calculatePayout()
+            SET i = i + 1
 
-                SET i = i + 1
-
-            END WHILE
+        END WHILE
 
 END CLASS
 
@@ -146,39 +168,27 @@ SET policy = NEW Policy("POL001")
 
 
 DECLARE vehicle : VehicleClaim
-
 SET vehicle = NEW VehicleClaim("VC001","10/05/2026","Pending",5000,500)
 
-
 DECLARE medical : MedicalClaim
-
 SET medical = NEW MedicalClaim("MC001","11/05/2026","Pending",8000,6000)
 
-
 DECLARE property : PropertyClaim
-
 SET property = NEW PropertyClaim("PC001","12/05/2026","Pending",12000,10)
 
 
 CALL policy.addClaim(vehicle)
-
 CALL policy.addClaim(medical)
-
 CALL policy.addClaim(property)
 
 
 PRINT "Vehicle Claim Payout = "
-
 PRINT vehicle.calculatePayout()
 
-
 PRINT "Medical Claim Payout = "
-
 PRINT medical.calculatePayout()
 
-
 PRINT "Property Claim Payout = "
-
 PRINT property.calculatePayout()
 
 
