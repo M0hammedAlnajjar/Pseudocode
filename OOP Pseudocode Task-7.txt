@@ -964,26 +964,13 @@ SET terms1 = NEW PaymentTerms("30-07-2026",5)
 
 DECLARE fixedInvoice1 : FixedPriceInvoice
 
-SET fixedInvoice1 = NEW FixedPriceInvoice(
-"INV001",
-"01-07-2026",
-"ABC Company",
-terms1,
-5000
-)
-
+SET fixedInvoice1 = NEW FixedPriceInvoice("INV001","01-07-2026","ABC Company",terms1,5000)
 
 
 
 DECLARE hourlyInvoice1 : HourlyInvoice
 
-SET hourlyInvoice1 = NEW HourlyInvoice(
-"INV002",
-"02-07-2026",
-"XYZ Company",
-terms1
-)
-
+SET hourlyInvoice1 = NEW HourlyInvoice("INV002","02-07-2026","XYZ Company",terms1)
 
 
 
@@ -1006,22 +993,10 @@ CALL hourlyInvoice1.addHourEntry(entry2)
 
 
 
-
 DECLARE retainerInvoice1 : RetainerInvoice
 
 
-SET retainerInvoice1 = NEW RetainerInvoice(
-"INV003",
-"03-07-2026",
-"Client Company",
-terms1,
-3000,
-20,
-30,
-100
-)
-
-
+SET retainerInvoice1 = NEW RetainerInvoice("INV003","03-07-2026","Client Company",terms1,3000,20,30,100)
 
 
 
@@ -1278,9 +1253,7 @@ CLASS Rack
 
     ATTRIBUTES
 
-        servers : List<Server>
-
-
+        servers : List(Server)
 
 
 
@@ -1340,12 +1313,10 @@ SET hardware1 = NEW HardwareSpecification("Intel Xeon",64,2000)
 
 
 
-
 DECLARE webServer1 : WebServer
 
 
 SET webServer1 = NEW WebServer("WEB001",500,hardware1,300,1000)
-
 
 
 
@@ -1358,7 +1329,6 @@ SET databaseServer1 = NEW DatabaseServer("DB001",800,hardware1,700,1000)
 
 
 
-
 DECLARE cacheServer1 : CacheServer
 
 
@@ -1367,12 +1337,10 @@ SET cacheServer1 = NEW CacheServer("CACHE001",900,hardware1,600,1000,0.80)
 
 
 
-
 DECLARE rack1 : Rack
 
 
 SET rack1 = NEW Rack()
-
 
 
 
@@ -1386,12 +1354,10 @@ CALL rack1.addServer(cacheServer1)
 
 
 
-
 PRINT "Current Server Loads"
 
 
 CALL rack1.displayServers()
-
 
 
 
